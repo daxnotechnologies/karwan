@@ -1,15 +1,15 @@
-const users = require("../models/users.models");
+const User = require("../models/user.model");
 
 //////////////////////////////////////////////////////////////////////////////
 async function addUser(req, res) {
   const { userName, email, contact, address, profilePic, password } = req.body;
   try {
-    const preUser = await users.findOne({ email: email });
+    const preUser = await User.findOne({ email: email });
     console.log(preUser);
     if (preUser) {
       res.status(404).send("This user already exists");
     } else {
-      const addUser = new users({
+      const addUser = new User({
         userName,
         email,
         password,
@@ -29,7 +29,7 @@ async function addUser(req, res) {
 //////////////////////////////////////////////////////////////////////////////
 async function getUsers(req, res) {
   try {
-    const usersData = await users.find();
+    const usersData = await User.find();
     res.status(200).json(usersData);
     console.log(usersData);
   } catch (error) {
@@ -41,7 +41,7 @@ async function getUsers(req, res) {
 async function getSingleUser(req, res) {
   const userId = req.params.id;
   try {
-    const userData = await users.findById(userId);
+    const userData = await User.findById(userId);
     res.status(200).json(userData);
     console.log(userData);
   } catch (error) {
@@ -53,8 +53,8 @@ async function getSingleUser(req, res) {
 async function deleteUser(req, res) {
   const userId = req.params.id;
   try {
-    await users.findByIdAndDelete(userId);
-    res.status(201).json({ msg: "User Deleted" });
+    await User.findByIdAndDelete(userId);
+    res.status(200).json({ msg: "User Deleted" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: err.message });

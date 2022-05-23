@@ -1,15 +1,15 @@
-const videos = require("../models/videos.models");
+const Video = require("../models/video.model");
 
 //////////////////////////////////////////////////////////////////////////////
 async function addVideo(req, res) {
   const { videoLink } = req.body;
   try {
-    const preVideo = await videos.findOne({ videoLink: videoLink });
+    const preVideo = await Video.findOne({ videoLink: videoLink });
     console.log(preVideo);
     if (preVideo) {
       res.status(404).send("This video already exists");
     } else {
-      const addVideo = new videos({
+      const addVideo = new Video({
         videoLink,
       });
       await addVideo.save();
@@ -24,7 +24,7 @@ async function addVideo(req, res) {
 //////////////////////////////////////////////////////////////////////////////
 async function getVideos(req, res) {
   try {
-    const videosData = await videos.find();
+    const videosData = await Video.find();
     res.status(200).json(videosData);
     console.log(videosData);
   } catch (error) {
@@ -36,7 +36,7 @@ async function getVideos(req, res) {
 async function getSingleVideo(req, res) {
   const videoId = req.params.id;
   try {
-    const videoData = await videos.findById(videoId);
+    const videoData = await Video.findById(videoId);
     res.status(200).json(videoData);
     console.log(videoData);
   } catch (error) {
@@ -48,8 +48,8 @@ async function getSingleVideo(req, res) {
 async function deleteVideo(req, res) {
   const videoId = req.params.id;
   try {
-    await videos.findByIdAndDelete(videoId);
-    res.status(201).json({ msg: "Video Deleted" });
+    await Video.findByIdAndDelete(videoId);
+    res.status(200).json({ msg: "Video Deleted" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: err.message });

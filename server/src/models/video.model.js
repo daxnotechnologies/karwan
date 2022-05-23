@@ -9,6 +9,6 @@ const VideoSchema = new mongoose.Schema({
   password: { type: String, required: true }, */
 });
 
-const videos = new mongoose.model("videos", VideoSchema);
+const Video = new mongoose.model("Video", VideoSchema);
 
-module.exports = videos;
+module.exports = Video;
