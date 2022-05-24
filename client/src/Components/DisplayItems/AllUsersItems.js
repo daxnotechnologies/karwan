@@ -1,12 +1,12 @@
-import { deleteDoc, doc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { db } from "../../api/firebase-config";
 import useUser from "../../hooks/useUser";
 import Backdrop from "../UI/BackdropModal";
 import Button from "../UI/Button";
 
-const AllUsersItems = ({ userName, userId, imagePath }) => {
+const AllUsersItems = ({ user }) => {
+  // console.log(user);
+
   let navigate = useNavigate();
   const { deleteUser } = useUser();
 
@@ -18,22 +18,18 @@ const AllUsersItems = ({ userName, userId, imagePath }) => {
       <div className="grid grid-cols-12 place-items-center text-center">
         <div className="col-span-7 lg:col-span-9 flex place-self-start text-left font-semibold text-primary">
           <div className="grid place-items-center mr-4">
-            {imagePath ? (
-              !isloading ? (
-                <img
-                  src={imagePath}
-                  alt=""
-                  className="object-cover h-14 w-14 rounded-full"
-                />
-              ) : (
-                <div className="h-14 w-14 bg-gray-500 rounded-full animate-pulse" />
-              )
+            {user?.profilePic ? (
+              <img
+                src={user?.profilePic}
+                alt=""
+                className="object-cover h-14 w-14 rounded-full"
+              />
             ) : (
               <div className="h-14 w-14 bg-slate-300 rounded-full" />
             )}
           </div>
           <div className="flex flex-col gap-2">
-            <p>{userName}</p>
+            <p>{user?.userName}</p>
             <div className="flex items-center gap-2">
               <p className=" text-[#404852] text-[12px]">{"5:12 pm"}</p>
               <p className=" text-[#404852] self-end">.</p>
@@ -47,7 +43,7 @@ const AllUsersItems = ({ userName, userId, imagePath }) => {
         <div className="col-span-2 lg:col-span-1">
           <Button
             onClick={() => {
-              navigate(`/dashboard/edit-user/${userId}`);
+              navigate(`/dashboard/edit-user/${user._id}`);
             }}
           >
             Edit
@@ -75,7 +71,7 @@ const AllUsersItems = ({ userName, userId, imagePath }) => {
           <Button
             type={"button"}
             onClick={() => {
-              deleteUser(userId);
+              // deleteUser(userId);
               setShowModal(false);
             }}
           >

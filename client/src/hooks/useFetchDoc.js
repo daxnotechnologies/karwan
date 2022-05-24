@@ -1,37 +1,34 @@
 import { useEffect, useState } from "react";
-import { collection, doc, getDoc } from "firebase/firestore";
-import { db } from "../api/firebase-config";
+import axios from "axios";
 
-const useFetchDoc = (collectionName, docId) => {
+const useFetchDoc = (endPoint) => {
   const [isloading, setIsloading] = useState(true);
-  const [docData, setDocData] = useState([]);
-  const collectionRef = collection(db, collectionName);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [docData, setDocData] = useState(null);
 
   useEffect(() => {
-    let isMounted = true;
+    const API = axios.create({ baseURL: "http://localhost:5000" });
 
-    const fetchDoc = async (docId) => {
+    const fetchDoc = async (endPoint) => {
       try {
-        const fetchedDocdata = await getDoc(doc(collectionRef, docId));
+        const res = await API.get(endPoint);
+        console.log(res.data);
 
-        if (isMounted === true) {
-          setDocData(fetchedDocdata.data());
+        setDocData(res.data);
+        if (res.status === 200) {
           setIsloading(false);
         }
-      } catch (error) {
-        console.log(error.message);
-        // alert(error);
+      } catch (err) {
+        console.log(err);
+        setErrorMessage(err.message);
       }
     };
-    fetchDoc(docId);
 
-    return () => {
-      isMounted = false;
-    };
-  }, [collectionRef, docId]);
+    fetchDoc(endPoint);
+  }, []);
   console.log(docData);
 
-  return { docData, isloading };
+  return { docData, isloading, errorMessage };
 };
 
 export default useFetchDoc;

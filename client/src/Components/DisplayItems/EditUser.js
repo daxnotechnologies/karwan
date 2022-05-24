@@ -8,29 +8,37 @@ import Backdrop from "../UI/BackdropModal";
 import InputFile from "../UI/InputFile";
 import useFetchDoc from "../../hooks/useFetchDoc";
 import useUser from "../../hooks/useUser";
+import userService from "../../api/users.api";
 
 const EditUser = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
 
-  const { docData: selectedUser, isloading } = useFetchDoc("users", userId);
+  const { docData: selectedUser, isloading } = useFetchDoc(
+    `/get-user/${userId}`
+  );
+
   console.log(selectedUser);
+
   const { updateUser, uploadUserImage, imagePath } = useUser();
   const [profilePic, setProfilePic] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      name: selectedUser.name,
-      email: selectedUser.email,
-      password: selectedUser.password,
-      favourites: selectedUser.favourites,
-      imagePath: selectedUser.imagePath,
+      userName: selectedUser?.userName,
+      email: selectedUser?.email,
+      contact: selectedUser?.contact,
+      address: selectedUser?.address,
+      imagePath: selectedUser?.imagePath,
     },
     enableReinitialize: true,
-    onSubmit: (values) => {
-      updateUser(values, userId, imagePath);
-      navigate("/dashboard/users");
+
+    onSubmit: async (values) => {
+      console.log(values);
+      await userService.updateUser(userId, values);
+      /* updateUser(values, userId, imagePath);
+      navigate("/dashboard/users"); */
     },
   });
 
@@ -72,10 +80,10 @@ const EditUser = () => {
             <Input
               width="full"
               type="text"
-              name="name"
+              name="userName"
               label="Name:"
               onChange={formik.handleChange}
-              value={formik.values.name}
+              value={formik.values.userName}
             />
             <Input
               width="full"
@@ -88,18 +96,18 @@ const EditUser = () => {
             <Input
               width="full"
               type="text"
-              label="Password:"
-              name="password"
+              label="Contact:"
+              name="contact"
               onChange={formik.handleChange}
-              value={formik.values.password}
+              value={formik.values.contact}
             />
             <Input
               width="full"
-              type="number"
-              label="Favourites"
-              name="favourites"
+              type="text"
+              label="Address"
+              name="address"
               onChange={formik.handleChange}
-              value={formik.values.favourites}
+              value={formik.values.address}
             />
             {/* <TextArea
             rows={1}

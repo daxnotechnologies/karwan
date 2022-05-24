@@ -1,29 +1,31 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../api/firebase-config";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-const useFetch = (collectionName, rerender) => {
+const useFetch = (endPoint) => {
   const [isloading, setIsloading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
-  const [data, setData] = useState([]);
-  const collectionRef = collection(db, collectionName);
-
-  const fetchData = useCallback(async () => {
-    try {
-      const fetchedData = await getDocs(collectionRef);
-      setData(fetchedData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-      setIsloading(false);
-    } catch (error) {
-      console.log(error);
-      setErrorMessage(error.message);
-      alert(error);
-    }
-  }, [collectionRef]);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData, rerender]);
-  // console.log(data);
+    const API = axios.create({ baseURL: "http://localhost:5000" });
+    const fetchData = async (endPoint) => {
+      try {
+        const res = await API.get(endPoint);
+        // console.log(res.data);
+        setData(res.data);
+        if (res.status === 200) {
+          setIsloading(false);
+        }
+      } catch (err) {
+        console.log(err);
+        setErrorMessage(err.message);
+      }
+    };
+
+    fetchData(endPoint);
+  }, []);
+
+  console.log(data);
 
   return { data, isloading, errorMessage };
 };
