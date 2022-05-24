@@ -49,6 +49,17 @@ async function getSingleProduct(req, res) {
 }
 
 //////////////////////////////////////////////////////////////////////////////
+async function updateProduct(req, res) {
+  try {
+    await Product.findByIdAndUpdate(req.params.id, req.body);
+    res.status(200).json({ msg: "Product Updated" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
 async function deleteProduct(req, res) {
   const productId = req.params.id;
   try {
@@ -60,4 +71,10 @@ async function deleteProduct(req, res) {
   }
 }
 
-module.exports = { getProducts, getSingleProduct, addProduct, deleteProduct };
+module.exports = {
+  getProducts,
+  getSingleProduct,
+  addProduct,
+  updateProduct,
+  deleteProduct,
+};

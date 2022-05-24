@@ -42,6 +42,17 @@ async function getSingleVisa(req, res) {
 }
 
 //////////////////////////////////////////////////////////////////////////////
+async function updateVisa(req, res) {
+  try {
+    await Visa.findByIdAndUpdate(req.params.id, req.body);
+    res.status(200).json({ msg: "Visa Updated" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
 async function deleteVisa(req, res) {
   const visaId = req.params.id;
   try {
@@ -53,4 +64,4 @@ async function deleteVisa(req, res) {
   }
 }
 
-module.exports = { getVisa, getSingleVisa, addVisa, deleteVisa };
+module.exports = { getVisa, getSingleVisa, addVisa, updateVisa, deleteVisa };

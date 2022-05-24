@@ -58,9 +58,20 @@ async function deleteBookRequest(req, res) {
   }
 }
 
+async function updateBookRequest(req, res) {
+  try {
+    await BookRequest.findByIdAndUpdate(req.params.id, req.body);
+    res.status(200).json({ msg: "BookRequest Updated" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
 module.exports = {
   getBookRequests,
   getSingleBookRequest,
   addBookRequest,
+  updateBookRequest,
   deleteBookRequest,
 };

@@ -7,6 +7,7 @@ const VisaSchema = new mongoose.Schema({
   gender: { type: String /* , required: true */ },
   contact: { type: Number /* , required: true */ },
   address: { type: String /* , required: true */ },
+  visaRequestDate: { type: Date /* , required: true */ },
   dateOfBirth: { type: Date /* , required: true */ },
   placeOfBirth: { type: String /* , required: true */ },
   umrahDuration: { type: String /* , required: true */ },

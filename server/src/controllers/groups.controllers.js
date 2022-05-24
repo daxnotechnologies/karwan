@@ -2,8 +2,8 @@ const Group = require("../models/group.model");
 
 //////////////////////////////////////////////////////////////////////////////
 async function addGroup(req, res) {
-  const { groupName /* , groupAdmin_id */, groupMembers } = req.body;
-  const totalMembers = groupMembers.length;
+  const { groupName, groupMembers } = req.body;
+
   try {
     const preGroup = await Group.findOne({ groupName: groupName });
     console.log(preGroup);
@@ -12,7 +12,6 @@ async function addGroup(req, res) {
     } else {
       const addGroup = await Group.create({
         groupName,
-        totalMembers,
         groupMembers,
       });
       res.status(201).json(addGroup);
@@ -55,6 +54,17 @@ async function getSingleGroup(req, res) {
 }
 
 //////////////////////////////////////////////////////////////////////////////
+async function updateGroup(req, res) {
+  try {
+    await Group.findByIdAndUpdate(req.params.id, req.body);
+    res.status(200).json({ msg: "Group Updated" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
 async function deleteGroup(req, res) {
   const groupId = req.params.id;
   try {
@@ -66,4 +76,10 @@ async function deleteGroup(req, res) {
   }
 }
 
-module.exports = { getGroups, getSingleGroup, addGroup, deleteGroup };
+module.exports = {
+  getGroups,
+  getSingleGroup,
+  addGroup,
+  updateGroup,
+  deleteGroup,
+};

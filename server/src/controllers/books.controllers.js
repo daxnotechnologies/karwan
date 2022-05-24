@@ -48,6 +48,17 @@ async function getSingleBook(req, res) {
 }
 
 //////////////////////////////////////////////////////////////////////////////
+async function updateBook(req, res) {
+  try {
+    await Book.findByIdAndUpdate(req.params.id, req.body);
+    res.status(200).json({ msg: "Book Updated" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
 async function deleteBook(req, res) {
   const bookId = req.params.id;
   try {
@@ -63,5 +74,6 @@ module.exports = {
   getBooks,
   getSingleBook,
   addBook,
+  updateBook,
   deleteBook,
 };

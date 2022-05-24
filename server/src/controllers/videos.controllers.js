@@ -45,6 +45,17 @@ async function getSingleVideo(req, res) {
 }
 
 //////////////////////////////////////////////////////////////////////////////
+async function updateVideo(req, res) {
+  try {
+    await Video.findByIdAndUpdate(req.params.id, req.body);
+    res.status(200).json({ msg: "Video Updated" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
 async function deleteVideo(req, res) {
   const videoId = req.params.id;
   try {
@@ -56,4 +67,10 @@ async function deleteVideo(req, res) {
   }
 }
 
-module.exports = { getVideos, getSingleVideo, addVideo, deleteVideo };
+module.exports = {
+  getVideos,
+  getSingleVideo,
+  addVideo,
+  updateVideo,
+  deleteVideo,
+};

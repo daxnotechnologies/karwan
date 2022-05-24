@@ -50,6 +50,17 @@ async function getSingleUser(req, res) {
 }
 
 //////////////////////////////////////////////////////////////////////////////
+async function updateUser(req, res) {
+  try {
+    await User.findByIdAndUpdate(req.params.id, req.body);
+    res.status(200).json({ msg: "User Updated" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
 async function deleteUser(req, res) {
   const userId = req.params.id;
   try {
@@ -61,4 +72,4 @@ async function deleteUser(req, res) {
   }
 }
 
-module.exports = { getUsers, getSingleUser, addUser, deleteUser };
+module.exports = { getUsers, getSingleUser, addUser, updateUser, deleteUser };

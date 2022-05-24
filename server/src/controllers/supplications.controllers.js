@@ -48,6 +48,17 @@ async function getSingleSupplication(req, res) {
 }
 
 //////////////////////////////////////////////////////////////////////////////
+async function updateSupplication(req, res) {
+  try {
+    await Supplication.findByIdAndUpdate(req.params.id, req.body);
+    res.status(200).json({ msg: "Supplication Updated" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msg: err.message });
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
 async function deleteSupplication(req, res) {
   const supplicationId = req.params.id;
   try {
@@ -63,5 +74,6 @@ module.exports = {
   getSupplications,
   getSingleSupplication,
   addSupplication,
+  updateSupplication,
   deleteSupplication,
 };
