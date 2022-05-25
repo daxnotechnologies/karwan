@@ -1,5 +1,5 @@
+import API from "../api/baseURL";
 import { useEffect, useState } from "react";
-import axios from "axios";
 
 const useFetchDoc = (endPoint) => {
   const [isloading, setIsloading] = useState(true);
@@ -7,8 +7,6 @@ const useFetchDoc = (endPoint) => {
   const [docData, setDocData] = useState(null);
 
   useEffect(() => {
-    const API = axios.create({ baseURL: "http://localhost:5000" });
-
     const fetchDoc = async (endPoint) => {
       try {
         const res = await API.get(endPoint);

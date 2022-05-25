@@ -1,10 +1,8 @@
-import axios from "axios";
-
-const API = axios.create({ baseURL: "http://localhost:5000" });
+import API from "./baseURL";
 
 const addUser = async (formData) => {
   try {
-    const { data } = await API.patch("/add-user", formData);
+    const { data } = await API.post("/add-user", formData);
     console.log(data);
     return data;
   } catch (error) {
@@ -23,12 +21,11 @@ const updateUser = async (id, formData) => {
 };
 
 const deleteUser = async (id) => {
-  // console.log(data);
   try {
     const res = await API.delete(`/delete-user/${id}`);
     return res;
   } catch (error) {
-    return error.message;
+    console.log(error);
   }
 };
 

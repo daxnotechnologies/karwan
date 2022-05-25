@@ -1,14 +1,14 @@
-import axios from "axios";
+import API from "../api/baseURL";
 import { useEffect, useState } from "react";
 
-const useFetch = (endPoint) => {
+const useFetch = (endPoint, check) => {
   const [isloading, setIsloading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    const API = axios.create({ baseURL: "http://localhost:5000" });
     const fetchData = async (endPoint) => {
+      setIsloading(true);
       try {
         const res = await API.get(endPoint);
         // console.log(res.data);
@@ -23,7 +23,7 @@ const useFetch = (endPoint) => {
     };
 
     fetchData(endPoint);
-  }, []);
+  }, [check]);
 
   console.log(data);
 

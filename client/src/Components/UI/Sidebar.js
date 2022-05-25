@@ -24,15 +24,15 @@ const Sidebar = (props) => {
 
   const sidebarList = [
     { key: "1", name: "Videos", route: "/dashboard" },
-    { key: "1", name: "Add Video", route: "/dashboard/add-video" },
-    { key: "2", name: "Visa Requests", route: "/dashboard/visa-requests" },
-    { key: "3", name: "Books", route: "/dashboard/all-books" },
-    { key: "3", name: "Groups", route: "/dashboard/all-groups" },
-    { key: "4", name: "Add Group", route: "/dashboard/add-group" },
+    { key: "2", name: "Add Video", route: "/dashboard/add-video" },
+    { key: "3", name: "Visa Requests", route: "/dashboard/visa-requests" },
+    { key: "4", name: "Books", route: "/dashboard/all-books" },
+    { key: "5", name: "Groups", route: "/dashboard/all-groups" },
+    { key: "6", name: "Add Group", route: "/dashboard/add-group" },
     // { key: "6", name: "Featured Apps", route: "/dashboard/featured-apps" },
     { key: "7", name: "Users", route: "/dashboard/users" },
-    { key: "5", name: "Request Book", route: "/dashboard/book-requests" },
-    { key: "8", name: "Logout", route: "/", logout: true },
+    { key: "8", name: "Request Book", route: "/dashboard/book-requests" },
+    { key: "9", name: "Logout", route: "/", logout: true },
   ];
 
   return (

@@ -2,29 +2,32 @@ import { deleteDoc, doc } from "firebase/firestore";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../api/firebase-config";
+import videoService from "../../api/videos.api";
 import useCategory from "../../hooks/useCategory";
 import Backdrop from "../UI/BackdropModal";
 import Button from "../UI/Button";
 
-const AllCategoriesItems = ({ categoryName, categoryId }) => {
-  const navigate = useNavigate();
-  const { deleteCategory } = useCategory();
+const VideosItems = ({ video, check, setCheck }) => {
+  let navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
 
   return (
     <>
       <div className="grid grid-cols-12 place-items-center text-center">
         <div className="col-span-7 lg:col-span-9 flex place-self-start text-left font-semibold text-primary">
-          <div className="grid place-items-center">
-            {/* <img
-              src={imgSrc}
-              alt=""
-              className="object-cover h-12  rounded-full"
-            /> */}
-          </div>
-
+          {/* <div className="grid place-items-center mr-4">
+            {video?.profilePic ? (
+              <img
+                src={video?.profilePic}
+                alt=""
+                className="object-cover h-14 w-14 rounded-full"
+              />
+            ) : (
+              <div className="h-14 w-14 bg-slate-300 rounded-full" />
+            )}
+          </div> */}
           <div className="flex flex-col gap-2">
-            <p>{categoryName}</p>
+            <p>{video?.videoLink}</p>
             <div className="flex items-center gap-2">
               <p className=" text-[#404852] text-[12px]">{"5:12 pm"}</p>
               <p className=" text-[#404852] self-end">.</p>
@@ -34,10 +37,11 @@ const AllCategoriesItems = ({ categoryName, categoryId }) => {
             </div>
           </div>
         </div>
+
         <div className="col-span-2 lg:col-span-1">
           <Button
             onClick={() => {
-              navigate(`/dashboard/edit-category/${categoryId}`);
+              navigate(`/dashboard/edit-video/${video._id}`);
             }}
           >
             Edit
@@ -48,8 +52,7 @@ const AllCategoriesItems = ({ categoryName, categoryId }) => {
             alt
             onClick={() => {
               setShowModal(true);
-
-              // alert(categoryName + " with Id " + categoryId + " deleted");
+              // alert(userName + " with Id " + userId + " deleted");
             }}
           >
             Delete
@@ -57,19 +60,18 @@ const AllCategoriesItems = ({ categoryName, categoryId }) => {
         </div>
       </div>
       <Backdrop
-        title="Delete!"
+        title="Delete User!"
         show={showModal}
         onClick={() => setShowModal(false)}
       >
-        Are you sure you want to delete this Category?
+        Are you sure you want to delete the video?
         <div className="self-end mt-4">
           <Button
             type={"button"}
-            onClick={() => {
-              deleteCategory(categoryId);
+            onClick={async () => {
+              await videoService.deleteVideo(video._id);
               setShowModal(false);
-              navigate("/dashboard");
-              // forceUpdate()
+              setCheck(!check);
             }}
           >
             Yes
@@ -80,4 +82,4 @@ const AllCategoriesItems = ({ categoryName, categoryId }) => {
   );
 };
 
-export default AllCategoriesItems;
+export default VideosItems;

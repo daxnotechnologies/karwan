@@ -6,21 +6,21 @@ import TextArea from "../Components/UI/TextArea";
 import Backdrop from "../Components/UI/BackdropModal";
 import Button from "../Components/UI/Button";
 import { useNavigate } from "react-router-dom";
-import useCategory from "../hooks/useCategory";
+import videoService from "../api/videos.api";
 
 const AddVideo = () => {
   const navigate = useNavigate();
-  const { addCategory } = useCategory();
   const [showModal, setShowModal] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      link: "",
-      description: "",
+      videoLink: "",
     },
     enableReinitialize: true,
-    onSubmit: (values) => {
-      setShowModal(true);
+    onSubmit: async (values) => {
+      console.log(values);
+      await videoService.addVideo(values);
+      navigate("/dashboard");
     },
   });
   return (
@@ -35,10 +35,10 @@ const AddVideo = () => {
             <Input
               width="full"
               type="text"
-              name="name"
+              name="videoLink"
               label="Video Link"
               onChange={formik.handleChange}
-              value={formik.values.link}
+              value={formik.values.videoLink}
             />
             {/* <TextArea
               type="text"
@@ -50,35 +50,35 @@ const AddVideo = () => {
             />
             <input type="file" name="" id="" /> */}
             <div>
-              <button
-                type="submit"
-                className="flex bg-primary hover:bg-primaryL text-white rounded-lg mx-auto  px-8 py-3 md:px-10 md:py-3 md:ml-auto md:mx-0"
+              <Button
+                type="button"
+                onClick={() => {
+                  setShowModal(true);
+                }}
               >
-                Add Video
-              </button>
+                <div className="text-base p-1">Add Video</div>
+              </Button>
             </div>
+            <Backdrop
+              title="Add Video"
+              show={showModal}
+              onClick={() => setShowModal(false)}
+            >
+              Do you want to add this Video ?
+              <div className="self-end">
+                <Button
+                  type={"submit"}
+                  onClick={() => {
+                    setShowModal(false);
+                  }}
+                >
+                  Yes
+                </Button>
+              </div>
+            </Backdrop>
           </form>
         </div>
       </Card>
-      <Backdrop
-        title="Add Video"
-        show={showModal}
-        onClick={() => setShowModal(false)}
-      >
-        Do you want to add this Video ?
-        <div className="self-end">
-          <Button
-            type={"button"}
-            onClick={() => {
-              addCategory(formik.values);
-              setShowModal(false);
-              navigate("/dashboard");
-            }}
-          >
-            Yes
-          </Button>
-        </div>
-      </Backdrop>
     </>
   );
 };

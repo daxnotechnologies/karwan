@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Card from "../Components/UI/Card";
-import AllCategoriesItems from "../Components/DisplayItems/AllCategoriesItems";
+
 import { db } from "../api/firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 import Spinner from "../Components/UI/Spinner";
 import useFetch from "../hooks/useFetch";
 import currentDate from "../utility/currentDate";
+import VisaRequestsItems from "../Components/DisplayItems/VisaRequestsItems";
 
 const AllVisaRequests = () => {
-  const { data: allCategories, isloading } = useFetch("categories");
+  const [check, setCheck] = useState(false);
+  const { data: visa, isloading } = useFetch("/get-visa", check);
   const date = currentDate();
 
   return (
@@ -46,12 +48,13 @@ const AllVisaRequests = () => {
             md:overflow-y-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-300"
             >
               <div className="flex flex-col gap-y-7 ">
-                {allCategories.map((item) => {
+                {visa.map((item) => {
                   return (
-                    <AllCategoriesItems
-                      key={item.id}
-                      categoryName={item.name}
-                      categoryId={item.id}
+                    <VisaRequestsItems
+                      key={item._id}
+                      visa={item}
+                      check={check}
+                      setCheck={setCheck}
                     />
                   );
                 })}

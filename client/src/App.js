@@ -13,7 +13,7 @@ import AllVisaRequests from "./Pages/AllVisaRequests";
 import AllBooks from "./Pages/AllBooks";
 import AllGroups from "./Pages/AllGroups";
 import AddGroup from "./Pages/AddGroup";
-import BooksRequests from "./Pages/BooksRequests";
+import AllBooksRequests from "./Pages/AllBooksRequests";
 
 function App() {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -27,7 +27,7 @@ function App() {
             <Route path="/dashboard/categories" element={<AllVideos />} />
             <Route
               path="/dashboard/book-requests"
-              element={<BooksRequests />}
+              element={<AllBooksRequests />}
             />
             <Route
               path="/dashboard/visa-requests"

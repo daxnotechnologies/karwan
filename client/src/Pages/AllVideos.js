@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Card from "../Components/UI/Card";
-import AllCategoriesItems from "../Components/DisplayItems/AllCategoriesItems";
 import { db } from "../api/firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 import Spinner from "../Components/UI/Spinner";
 import useFetch from "../hooks/useFetch";
 import currentDate from "../utility/currentDate";
+import VideosItems from "../Components/DisplayItems/VideosItems";
 
 const AllVideos = () => {
-  const { data: allCategories, isloading } = useFetch("categories");
+  const [check, setCheck] = useState(false);
+
+  const { data: videos, isloading } = useFetch("/get-videos", check);
   const date = currentDate();
 
   return (
@@ -46,12 +48,13 @@ const AllVideos = () => {
             md:overflow-y-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-300"
             >
               <div className="flex flex-col gap-y-7 ">
-                {allCategories.map((item) => {
+                {videos.map((item) => {
                   return (
-                    <AllCategoriesItems
-                      key={item.id}
-                      categoryName={item.name}
-                      categoryId={item.id}
+                    <VideosItems
+                      key={item._id}
+                      video={item}
+                      check={check}
+                      setCheck={setCheck}
                     />
                   );
                 })}

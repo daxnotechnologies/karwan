@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "../Components/UI/Card";
 import AllUsersItems from "../Components/DisplayItems/AllUsersItems";
 import Spinner from "../Components/UI/Spinner";
@@ -6,9 +6,15 @@ import useFetch from "../hooks/useFetch";
 import currentDate from "../utility/currentDate";
 import { userAppRequest } from "../Components/DummyData/userAppRequests";
 import UserAppRequestItem from "../Components/DisplayItems/UserAppRequestItem";
+import BooksRequestsItems from "../Components/DisplayItems/BooksRequestsItems";
 
-const BooksRequests = () => {
-  const { data: requests, isloading } = useFetch("app-requests");
+const AllBooksRequests = () => {
+  const [check, setCheck] = useState(false);
+
+  const { data: bookRequests, isloading } = useFetch(
+    "/get-bookRequests",
+    check
+  );
   const date = currentDate();
 
   return (
@@ -45,19 +51,18 @@ const BooksRequests = () => {
               className="flex flex-col gap-5 mt-4 md:max-h-[55vh] xl:max-h-[55vh]
           md:overflow-y-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-300"
             >
-              {/* <div className="flex flex-col gap-y-7 ">
-                {requests.map((item) => {
+              <div className="flex flex-col gap-y-7 ">
+                {bookRequests.map((item) => {
                   return (
-                    <UserAppRequestItem
-                      key={item.id}
-                      appRequestId={item.id}
-                      userId={item.userId}
-                      appLink={item.appLink}
-                      isApproved={item.approved}
+                    <BooksRequestsItems
+                      key={item._id}
+                      bookRequest={item}
+                      check={check}
+                      setCheck={setCheck}
                     />
                   );
                 })}
-              </div> */}
+              </div>
             </div>
           )}
         </div>
@@ -66,4 +71,4 @@ const BooksRequests = () => {
   );
 };
 
-export default BooksRequests;
+export default AllBooksRequests;

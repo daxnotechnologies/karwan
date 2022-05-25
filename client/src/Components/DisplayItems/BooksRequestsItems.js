@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import groupService from "../../api/groups.api";
+import bookRequestService from "../../api/bookRequests.api";
 import Backdrop from "../UI/BackdropModal";
 import Button from "../UI/Button";
 
-const GroupsItems = ({ group, check, setCheck }) => {
+const BooksRequestsItems = ({ bookRequest, check, setCheck }) => {
   let navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
 
@@ -13,9 +13,9 @@ const GroupsItems = ({ group, check, setCheck }) => {
       <div className="grid grid-cols-12 place-items-center text-center">
         <div className="col-span-7 lg:col-span-9 flex place-self-start text-left font-semibold text-primary">
           {/* <div className="grid place-items-center mr-4">
-            {group?.profilePic ? (
+            {bookRequest?.profilePic ? (
               <img
-                src={group?.profilePic}
+                src={bookRequest?.profilePic}
                 alt=""
                 className="object-cover h-14 w-14 rounded-full"
               />
@@ -24,7 +24,7 @@ const GroupsItems = ({ group, check, setCheck }) => {
             )}
           </div> */}
           <div className="flex flex-col gap-2">
-            <p>{group?.groupName}</p>
+            <p>{bookRequest?.bookRequestLink}</p>
             <div className="flex items-center gap-2">
               <p className=" text-[#404852] text-[12px]">{"5:12 pm"}</p>
               <p className=" text-[#404852] self-end">.</p>
@@ -38,7 +38,7 @@ const GroupsItems = ({ group, check, setCheck }) => {
         <div className="col-span-2 lg:col-span-1">
           <Button
             onClick={() => {
-              navigate(`/dashboard/edit-group/${group._id}`);
+              navigate(`/dashboard/edit-bookRequest/${bookRequest._id}`);
             }}
           >
             Edit
@@ -61,12 +61,12 @@ const GroupsItems = ({ group, check, setCheck }) => {
         show={showModal}
         onClick={() => setShowModal(false)}
       >
-        Are you sure you want to delete the group?
+        Are you sure you want to delete the book request?
         <div className="self-end mt-4">
           <Button
             type={"button"}
             onClick={async () => {
-              await groupService.deleteGroup(group._id);
+              await bookRequestService.deleteBookRequest(bookRequest._id);
               setCheck(!check);
               setShowModal(false);
             }}
@@ -79,4 +79,4 @@ const GroupsItems = ({ group, check, setCheck }) => {
   );
 };
 
-export default GroupsItems;
+export default BooksRequestsItems;
