@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import userService from "../../api/videos.api";
 import useUser from "../../hooks/useUser";
 import Backdrop from "../UI/BackdropModal";
 import Button from "../UI/Button";
 
-const AllUsersItems = ({ user }) => {
+const AllUsersItems = ({ user, check, setCheck }) => {
   // console.log(user);
-
   let navigate = useNavigate();
-  const { deleteUser } = useUser();
-
-  const [isloading, setIsloading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -70,8 +67,9 @@ const AllUsersItems = ({ user }) => {
         <div className="self-end mt-4">
           <Button
             type={"button"}
-            onClick={() => {
-              // deleteUser(userId);
+            onClick={async () => {
+              await userService.deleteUser(user._id);
+              setCheck(!check);
               setShowModal(false);
             }}
           >

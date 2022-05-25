@@ -8,7 +8,7 @@ import Backdrop from "../UI/BackdropModal";
 import InputFile from "../UI/InputFile";
 import useFetchDoc from "../../hooks/useFetchDoc";
 import useUser from "../../hooks/useUser";
-import userService from "../../api/users.api";
+import userService from "../../api/videos.api";
 
 const EditUser = () => {
   const navigate = useNavigate();
@@ -30,15 +30,15 @@ const EditUser = () => {
       email: selectedUser?.email,
       contact: selectedUser?.contact,
       address: selectedUser?.address,
-      imagePath: selectedUser?.imagePath,
+      profilePic: selectedUser?.profilePic,
     },
     enableReinitialize: true,
 
     onSubmit: async (values) => {
       console.log(values);
       await userService.updateUser(userId, values);
-      /* updateUser(values, userId, imagePath);
-      navigate("/dashboard/users"); */
+      navigate("/dashboard/users");
+      // updateUser(values, userId, imagePath);
     },
   });
 
@@ -55,16 +55,16 @@ const EditUser = () => {
           ${isloading ? "opacity-50" : "opacity-100"}`}
           >
             <div className="flex items-center gap-6 mr-4">
-              {imagePath || formik.values.imagePath ? (
+              {imagePath || formik.values.profilePic ? (
                 <img
-                  src={imagePath || formik.values.imagePath}
+                  src={imagePath || formik.values.profilePic}
                   alt=""
                   className="object-cover h-14 w-14 rounded-full"
                 />
               ) : (
                 <div className="h-14 w-14 bg-slate-300 rounded-full" />
               )}
-              <InputFile
+              {/* <InputFile
                 name="imagePath"
                 imageName={profilePic?.name}
                 onChange={(e) => {
@@ -75,7 +75,7 @@ const EditUser = () => {
                 }}
               >
                 Upload
-              </InputFile>
+              </InputFile> */}
             </div>
             <Input
               width="full"

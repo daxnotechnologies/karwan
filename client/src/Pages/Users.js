@@ -1,13 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../Components/UI/Card";
 import AllUsersItems from "../Components/DisplayItems/AllUsersItems";
 import Spinner from "../Components/UI/Spinner";
 import useFetch from "../hooks/useFetch";
 import currentDate from "../utility/currentDate";
-import userService from "../api/users.api";
+import userService from "../api/videos.api";
 
 const Users = () => {
-  const { data: allUsers, isloading } = useFetch("/get-users");
+  const [check, setCheck] = useState(false);
+
+  const { data: allUsers, isloading } = useFetch("/get-users", check);
   const date = currentDate();
 
   console.log(allUsers);
@@ -48,7 +50,14 @@ const Users = () => {
             >
               <div className="flex flex-col gap-y-7 ">
                 {allUsers.map((item) => {
-                  return <AllUsersItems key={item?._id} user={item} />;
+                  return (
+                    <AllUsersItems
+                      key={item?._id}
+                      user={item}
+                      check={check}
+                      setCheck={setCheck}
+                    />
+                  );
                 })}
               </div>
             </div>
