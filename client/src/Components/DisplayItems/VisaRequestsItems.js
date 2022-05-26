@@ -44,7 +44,7 @@ const VisaRequestsItems = ({ visa, check, setCheck }) => {
         <div className="col-span-2 lg:col-span-1">
           <Button
             onClick={() => {
-              navigate(`/dashboard/edit-visa/${visa._id}`);
+              navigate(`/dashboard/edit-visaRequest/${visa._id}`);
             }}
           >
             Edit

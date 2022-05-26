@@ -3,10 +3,6 @@ import Users from "./Pages/Users";
 import MainPage from "./Pages/MainPage";
 import EditUser from "./Components/DisplayItems/EditUser";
 import Login from "./Pages/Login";
-
-import EditCategory from "./Components/DisplayItems/EditCategory";
-import EditApp from "./Components/DisplayItems/EditApp";
-
 import AddVideo from "./Pages/AddVideo";
 import AllVideos from "./Pages/AllVideos";
 import AllVisaRequests from "./Pages/AllVisaRequests";
@@ -14,9 +10,14 @@ import AllBooks from "./Pages/AllBooks";
 import AllGroups from "./Pages/AllGroups";
 import AddGroup from "./Pages/AddGroup";
 import AllBooksRequests from "./Pages/AllBooksRequests";
+import EditVisaRequest from "./Components/DisplayItems/EditVisaRequest";
+import EditGroup from "./Components/DisplayItems/EditGroup";
+import EditBook from "./Components/DisplayItems/EditBook";
+import EditBookRequest from "./Components/DisplayItems/EditBookRequest";
+import EditVideo from "./Components/DisplayItems/EditVideo";
 
 function App() {
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  // const isLoggedIn = localStorage.getItem("isLoggedIn");
   return (
     <>
       <Routes>
@@ -24,7 +25,10 @@ function App() {
         {true && (
           <Route path="/dashboard" element={<MainPage />}>
             <Route index element={<AllVideos />} />
-            <Route path="/dashboard/categories" element={<AllVideos />} />
+            <Route path="/dashboard/videos" element={<AllVideos />} />
+            <Route path="/dashboard/books" element={<AllBooks />} />
+            <Route path="/dashboard/groups" element={<AllGroups />} />
+            <Route path="/dashboard/users" element={<Users />} />
             <Route
               path="/dashboard/book-requests"
               element={<AllBooksRequests />}
@@ -33,20 +37,27 @@ function App() {
               path="/dashboard/visa-requests"
               element={<AllVisaRequests />}
             />
-            <Route path="/dashboard/all-books" element={<AllBooks />} />
-            <Route path="/dashboard/all-groups" element={<AllGroups />} />
-
-            <Route path="/dashboard/users" element={<Users />} />
-            {/* <Route path="/dashboard/featured-apps" element={<FeaturedApps />} /> */}
 
             <Route path="/dashboard/add-video" element={<AddVideo />} />
             <Route path="/dashboard/add-group" element={<AddGroup />} />
 
-            <Route path="/dashboard/edit-app/:appId" element={<EditApp />} />
             <Route path="/dashboard/edit-user/:userId" element={<EditUser />} />
+            <Route path="/dashboard/edit-book/:bookId" element={<EditBook />} />
             <Route
-              path="/dashboard/edit-category/:categoryId"
-              element={<EditCategory />}
+              path="/dashboard/edit-video/:videoId"
+              element={<EditVideo />}
+            />
+            <Route
+              path="/dashboard/edit-group/:groupId"
+              element={<EditGroup />}
+            />
+            <Route
+              path="/dashboard/edit-visaRequest/:visaRequestId"
+              element={<EditVisaRequest />}
+            />
+            <Route
+              path="/dashboard/edit-bookRequest/:bookRequestId"
+              element={<EditBookRequest />}
             />
           </Route>
         )}

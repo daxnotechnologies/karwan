@@ -7,38 +7,41 @@ import Button from "../UI/Button";
 import Backdrop from "../UI/BackdropModal";
 import InputFile from "../UI/InputFile";
 import useFetchDoc from "../../hooks/useFetchDoc";
-import useUser from "../../hooks/useUser";
-import userService from "../../api/videos.api";
+import visaService from "../../api/visa.api";
 
-const EditUser = () => {
+const EditVisaRequest = () => {
   const navigate = useNavigate();
-  const { userId } = useParams();
+  const { visaRequestId } = useParams();
 
-  const { docData: selectedUser, isloading } = useFetchDoc(
-    `/get-user/${userId}`
+  const { docData: selectedVisaRequest, isloading } = useFetchDoc(
+    `/get-visa/${visaRequestId}`
   );
 
-  console.log(selectedUser);
+  console.log(selectedVisaRequest);
 
-  const { updateUser, uploadUserImage, imagePath } = useUser();
-  const [profilePic, setProfilePic] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      userName: selectedUser?.userName,
-      email: selectedUser?.email,
-      contact: selectedUser?.contact,
-      address: selectedUser?.address,
-      profilePic: selectedUser?.profilePic,
+      fullName: selectedVisaRequest?.fullName,
+      motherName: selectedVisaRequest?.motherName,
+      email: selectedVisaRequest?.email,
+      contact: selectedVisaRequest?.contact,
+      address: selectedVisaRequest?.address,
+      dateOfBirth: selectedVisaRequest?.dateOfBirth,
+      visaRequestDate: selectedVisaRequest?.visaRequestDate,
+      umrahDuration: selectedVisaRequest?.umrahDuration,
+      visaType: selectedVisaRequest?.visaType,
+      passportSizePhoto: selectedVisaRequest?.passportSizePhoto,
+      idCardFront: selectedVisaRequest?.idCardFront,
+      idCardBack: selectedVisaRequest?.idCardBack,
+      passport: selectedVisaRequest?.passport,
     },
     enableReinitialize: true,
-
     onSubmit: async (values) => {
       console.log(values);
-      await userService.updateUser(userId, values);
-      navigate("/dashboard/users");
-      // updateUser(values, userId, imagePath);
+      await visaService.updateVisa(visaRequestId, values);
+      navigate("/dashboard/visa-requests");
     },
   });
 
@@ -49,15 +52,15 @@ const EditUser = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col flex-wrap gap-6 px-6 lg:px-14"
         >
-          <h1 className="text-2xl">Edit User</h1>
+          <h1 className="text-2xl">Edit Visa Request</h1>
           <section
             className={`flex flex-col flex-wrap gap-6 transition-opacity duration-500 ease-out
           ${isloading ? "opacity-50" : "opacity-100"}`}
           >
             <div className="flex items-center gap-6 mr-4">
-              {formik.values.profilePic ? (
+              {formik.values.passportSizePhoto ? (
                 <img
-                  src={formik.values.profilePic}
+                  src={formik.values.passportSizePhoto}
                   alt=""
                   className="object-cover h-14 w-14 rounded-full"
                 />
@@ -71,7 +74,7 @@ const EditUser = () => {
                   setProfilePic(e.target.files[0]);
                 }}
                 onUpload={() => {
-                  uploadUserImage(profilePic, userId);
+                  uploadUserImage(profilePic, visaRequestId);
                 }}
               >
                 Upload
@@ -80,10 +83,18 @@ const EditUser = () => {
             <Input
               width="full"
               type="text"
-              name="userName"
-              label="Name:"
+              name="fullName"
+              label="Applicant Name:"
               onChange={formik.handleChange}
-              value={formik.values.userName}
+              value={formik.values.fullName}
+            />
+            <Input
+              width="full"
+              type="text"
+              name="motherName"
+              label="Mother's Name:"
+              onChange={formik.handleChange}
+              value={formik.values.motherName}
             />
             <Input
               width="full"
@@ -109,6 +120,41 @@ const EditUser = () => {
               onChange={formik.handleChange}
               value={formik.values.address}
             />
+            <Input
+              width="full"
+              type="text"
+              label="Date of Birth"
+              name="dateOfBirth"
+              onChange={formik.handleChange}
+              value={formik.values.dateOfBirth}
+            />
+            <Input
+              width="full"
+              type="text"
+              label="Visa Request Date"
+              name="visaRequestDate"
+              onChange={formik.handleChange}
+              value={formik.values.visaRequestDate}
+            />
+            <Input
+              width="full"
+              type="text"
+              label="Visa Type"
+              name="visaType"
+              onChange={formik.handleChange}
+              value={formik.values.visaType}
+            />
+            {formik.values.visaType?.toLowerCase() === "umrah" && (
+              <Input
+                width="full"
+                type="text"
+                label="Umrah Duration"
+                name="umrahDuration"
+                onChange={formik.handleChange}
+                value={formik.values.umrahDuration}
+              />
+            )}
+
             {/* <TextArea
             rows={1}
             type="text"
@@ -131,7 +177,7 @@ const EditUser = () => {
             <Button
               type="button"
               onClick={() => {
-                navigate("/dashboard/users");
+                navigate("/dashboard/visa-requests");
               }}
             >
               <div className="text-base p-1">Cancel</div>
@@ -155,4 +201,4 @@ const EditUser = () => {
   );
 };
 
-export default EditUser;
+export default EditVisaRequest;

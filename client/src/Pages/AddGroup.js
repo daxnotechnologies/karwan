@@ -1,130 +1,186 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
+import Input from "../Components/UI/Input";
+import Card from "../Components/UI/Card";
+import TextArea from "../Components/UI/TextArea";
+import Button from "../Components/UI/Button";
+import Backdrop from "../Components/UI/BackdropModal";
 
 import { useFormik } from "formik";
-import Card from "../Components/UI/Card";
-import Input from "../Components/UI/Input";
+import useFetchDoc from "../hooks/useFetchDoc";
+import useFetch from "../hooks/useFetch";
+import groupService from "../api/groups.api";
+import AllMembersItems from "../Components/DisplayItems/AllMembersItems";
 
 const AddGroup = () => {
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { groupId } = useParams();
+  const [showModal, setShowModal] = useState(false);
+  const [group, setGroup] = useState([]);
+  const [isMember, setIsMember] = useState(false);
 
+  const { data: users } = useFetch(`/get-users`, true);
+
+  // console.log(users);
+
+  /* useEffect(() => {
+    setGroup(selectedGroup?.groupMembers);
+  }, [selectedGroup?.groupMembers]); */
+
+  console.log(group);
   const formik = useFormik({
     initialValues: {
-      studentName: "",
-      fatherName: "",
-      email: "",
-      watsappNo: "",
-      country: "",
-      city: "",
-      password: "",
+      groupName: "",
+      groupMembers: group,
+      memberEmail: "",
     },
-    onSubmit: (values) => {
-      /* alert(JSON.stringify(values, null, 2)); */
-      alert("Parent Added!");
+    // enableReinitialize: true,
+    onSubmit: async (values) => {
+      /* await groupService.addGroup({
+        groupName: values.groupName,
+        groupMembers: group,
+      });
+      navigate("/dashboard/groups"); */
     },
   });
+
   return (
-    <Card>
-      <h1 className="text-secondary text-2xl">Add Group</h1>
-      <form
-        onSubmit={formik.handleSubmit}
-        className="flex flex-col flex-wrap gap-4 pt-6 md:px-14 md:gap-6"
-      >
-        <Input
-          width="full"
-          type="text"
-          name="studentName"
-          label="Group Name"
-          onChange={formik.handleChange}
-          value={formik.values.studentName}
-        />
-        {/* For small screen */}
-        {/* <div className="flex flex-col gap-6 md:hidden">
-          <Input
-            width="full"
-            label="Father Name"
-            name="fatherName"
-            type="text"
-            onChange={formik.handleChange}
-            value={formik.values.fatherName}
-          />
-          <Input
-            type="text"
-            label="Email"
-            name="email"
-            onChange={formik.handleChange}
-            value={formik.values.email}
-            width="full"
-          />
-        </div> */}
-        {/* For medium screen and above */}
-        {/* <div className="hidden md:flex md:gap-6">
-          <Input
-            width="half"
-            type="text"
-            label="Father Name"
-            name="fatherName"
-            onChange={formik.handleChange}
-            value={formik.values.fatherName}
-          />
-          <Input
-            width="half"
-            type="text"
-            label="Email"
-            name="email"
-            onChange={formik.handleChange}
-            value={formik.values.email}
-          />
-        </div> */}
-        <Input
-          width="full"
-          type="number"
-          label="Watsapp No."
-          name="watsappNo"
-          onChange={formik.handleChange}
-          value={formik.values.watsappNo}
-        />
-        <Input
-          width="full"
-          type="text"
-          label="Country"
-          name="country"
-          onChange={formik.handleChange}
-          value={formik.values.country}
-        />
-        <Input
-          width="full"
-          type="text"
-          label="City"
-          name="city"
-          onChange={formik.handleChange}
-          value={formik.values.city}
-        />
-        <Input
-          width="full"
-          type="text"
-          label="Password"
-          name="password"
-          onChange={formik.handleChange}
-          value={formik.values.password}
-        />
-        <input type="file" name="" id="" />
-        <div>
-          <button
-            type="submit"
-            className="flex bg-primary text-white rounded-lg mx-auto  px-8 py-3 md:px-10 md:py-3 md:ml-auto md:mx-0"
+    <>
+      <Card>
+        <form
+          onSubmit={formik.handleSubmit}
+          className="flex flex-col flex-wrap gap-4 px-6 lg:px-14"
+        >
+          <h1 className="text-2xl">Add Group</h1>
+
+          <div className="flex flex-col gap-6">
+            <Input
+              type="text"
+              name="groupName"
+              label="Group:"
+              onChange={formik.handleChange}
+              value={formik.values.groupName}
+            />
+            <Input
+              type="text"
+              name="memberEmail"
+              label="Group Member (e-mail)"
+              onChange={formik.handleChange}
+              value={formik.values.memberEmail}
+            />
+
+            {/* <Input
+              disabled
+              type="text"
+              name="groupAdmin"
+              label="Admin:"
+              onChange={formik.handleChange}
+              value={formik.values.groupAdmin}
+            /> */}
+            {/* <Input
+              disabled
+              type="text"
+              label="Created At:"
+              name="date"
+              onChange={formik.handleChange}
+              value={formik.values.date}
+            /> */}
+            <div className="shadow-sm ">
+              <h2 className="flex items-center justify-between mb-3">
+                <p className="text-secondary text-xl font-semibold">
+                  All Group Members
+                </p>
+                <Button
+                  type={"button"}
+                  onClick={() => {
+                    setIsMember(false);
+
+                    let preMember = group.filter(
+                      (member) => member.email === formik.values.memberEmail
+                    );
+                    console.log(preMember.length);
+                    if (preMember.length === 0) {
+                      let filteredUser = users.filter(
+                        (user) => user.email === formik.values.memberEmail
+                      );
+                      setGroup([...group, filteredUser[0]]);
+                      console.log(group);
+                    } else {
+                      setIsMember(true);
+                    }
+                  }}
+                >
+                  <div className="text-base p-1">Add User</div>
+                </Button>
+              </h2>
+
+              <div
+                className="flex flex-col gap-3 h-[45vh] pl-2 py-2 rounded border border-gray-500
+                lg:pl-4 lg:py-4
+                md:overflow-y-auto md:min-w-max scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-300 "
+              >
+                {group &&
+                  group?.map((member) => (
+                    <AllMembersItems
+                      key={member._id}
+                      groupMember={member}
+                      group={group}
+                      setGroup={setGroup}
+                    />
+                  ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-8 mt-4">
+            <Button
+              type="button"
+              onClick={() => {
+                // console.log(group.members);
+                // setShowModal(true);
+              }}
+            >
+              <div className="text-base p-1">Add Group</div>
+            </Button>
+            {/* <Button
+              type="button"
+              onClick={() => {
+                navigate("/dashboard/groups");
+              }}
+            >
+              <div className="text-base p-1">Cancel</div>
+            </Button> */}
+          </div>
+
+          <Backdrop
+            title="Duplicate"
+            show={isMember}
+            onClick={() => setIsMember(false)}
           >
-            Add Group
-          </button>
-          {/* <button
-            type="submit"
-            className="flex bg-green-500 text-white rounded-lg mx-auto  px-8 py-3 md:px-10 md:py-3 md:ml-auto md:mx-0"
+            Cannot add the same member twice !
+            <div className="self-end">
+              <Button type={"button"} onClick={() => setIsMember(false)}>
+                OK
+              </Button>
+            </div>
+          </Backdrop>
+
+          <Backdrop
+            title="Update"
+            show={showModal}
+            onClick={() => setShowModal(false)}
           >
-            Reset
-          </button> */}
-        </div>
-      </form>
-    </Card>
+            Are you sure you want to update group details?
+            <div className="self-end">
+              <Button type={"submit"} onClick={() => setShowModal(false)}>
+                OK
+              </Button>
+            </div>
+          </Backdrop>
+        </form>
+      </Card>
+    </>
   );
 };
 

@@ -6,78 +6,56 @@ import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
 import Card from "../UI/Card";
 import TextArea from "../UI/TextArea";
-import {
-  collection,
-  getDocs,
-  getDoc,
-  doc,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "../../api/firebase-config";
 import Button from "../UI/Button";
 import Backdrop from "../UI/BackdropModal";
 import AllMembersItems from "./AllMembersItems";
+import useFetchDoc from "../../hooks/useFetchDoc";
+import useFetch from "../../hooks/useFetch";
+import groupService from "../../api/groups.api";
 
 const EditGroup = () => {
   const navigate = useNavigate();
   const { groupId } = useParams();
-  const [group, setGroup] = useState({});
-  const [admin, setAdmin] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [group, setGroup] = useState([]);
+  const [isMember, setIsMember] = useState(false);
+  const { docData: selectedGroup, isloading } = useFetchDoc(
+    `/get-group/${groupId}`
+  );
+  const { data: users } = useFetch(`/get-users`, true);
 
-  const groupsCollectionRef = collection(db, "allGroups");
-  const usersCollectionRef = collection(db, "users");
+  // console.log(users);
 
   useEffect(() => {
-    /* const getUsers = async () => {
-      const userData = await getDoc(doc(usersCollectionRef, group.groupAdmin));
-      setAdmin(userData.data().name);
-    }; */
+    setGroup(selectedGroup?.groupMembers);
+  }, [selectedGroup?.groupMembers]);
 
-    const getGroups = async () => {
-      const data = await getDoc(doc(groupsCollectionRef, groupId));
-      setGroup(data.data());
-    };
-    let unmount = true;
-    if (unmount) {
-      getGroups();
-      /*  getUsers(); */
-    }
-    return () => {
-      unmount = false;
-    };
-  }, []);
-
-  const updateGroups = async (values) => {
-    const data = doc(groupsCollectionRef, groupId);
-    await updateDoc(data, {
-      groupName: values.groupName,
-      groupAdmin: values.groupAdmin,
-      date: values.date,
-      time: values.time,
-      addDepositingPeriod: values.addDepositingPeriod,
-      totalAmount: values.totalAmount,
-      maxPeople: values.maxPeople,
-      members: values.members,
-    });
+  const addUser = (selectedUser) => {
+    let filteredUser = users.filter((user) => user.email === selectedUser);
+    console.log(filteredUser);
+    // let newGroup = group.push(filteredUser);
+    // setGroup(newGroup);
   };
 
+  console.log(group);
   const formik = useFormik({
     initialValues: {
-      groupName: group.groupName,
-      groupAdmin: group.groupAdmin,
-      date: group.date,
-      time: group.time,
-      addDepositingPeriod: group.addDepositingPeriod,
-      totalAmount: group.totalAmount,
-      maxPeople: group.maxPeople,
-      members: group.members,
+      groupName: selectedGroup?.groupName,
+      groupMembers: group,
+      memberEmail: "",
+      // addDepositingPeriod: selectedGroup?.addDepositingPeriod,
+      // groupAdmin: selectedGroup?.groupAdmin,
+      // maxPeople: selectedGroup?.maxPeople,
+      // date: selectedGroup?.date,
+      // time: selectedGroup?.time,
+      // totalAmount: selectedGroup?.totalAmount,
     },
     enableReinitialize: true,
-    onSubmit: (values) => {
-      /* alert(JSON.stringify(values, null, 2)); */
-      updateGroups(values);
+    onSubmit: async (values) => {
+      await groupService.updateGroup(groupId, {
+        groupName: values.groupName,
+        groupMembers: group,
+      });
       navigate("/dashboard/groups");
     },
   });
@@ -91,71 +69,84 @@ const EditGroup = () => {
         >
           <h1 className="text-2xl">Edit Group</h1>
 
-          <div className="flex gap-6">
-            <div className="w-1/2 flex flex-col gap-4">
-              <Input
-                type="text"
-                name="groupName"
-                label="Group:"
-                onChange={formik.handleChange}
-                value={formik.values.groupName}
-              />
-              <Input
-                type="text"
-                name="addDepositingPeriod"
-                label="Deposition Period:"
-                onChange={formik.handleChange}
-                value={formik.values.addDepositingPeriod}
-              />
-              <Input
-                type="text"
-                label="Total Amount:"
-                name="totalAmount"
-                onChange={formik.handleChange}
-                value={formik.values.totalAmount}
-              />
-              <Input
-                disabled
-                type="text"
-                name="groupAdmin"
-                label="Admin:"
-                onChange={formik.handleChange}
-                value={formik.values.groupAdmin}
-              />
+          <div
+            className={`flex flex-col gap-6 ransition-opacity duration-500 ease-out
+          ${isloading ? "opacity-50" : "opacity-100"}`}
+          >
+            <Input
+              type="text"
+              name="groupName"
+              label="Group:"
+              onChange={formik.handleChange}
+              value={formik.values.groupName}
+            />
+            <Input
+              type="text"
+              name="memberEmail"
+              label="Group Member (e-mail)"
+              onChange={formik.handleChange}
+              value={formik.values.memberEmail}
+            />
 
-              <Input
-                type="text"
-                label="Created At:"
-                name="date"
-                onChange={formik.handleChange}
-                value={formik.values.date}
-              />
-            </div>
-            <div className="w-1/2 flex flex-col gap-4">
-              <Input
-                type="text"
-                label="Max Members:"
-                name="maxPeople"
-                onChange={formik.handleChange}
-                value={formik.values.maxPeople}
-              />
-              <div className=" shadow-sm ">
-                <h2 className="text-secondary text-xl font-semibold mb-3">
-                  All Members
-                </h2>
-                <div
-                  className="flex flex-col gap-3 h-80 pl-2 py-2 rounded border border-gray-500
-                lg:pl-4 lg:py-4
-                md:overflow-y-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-300"
+            {/* <Input
+              disabled
+              type="text"
+              name="groupAdmin"
+              label="Admin:"
+              onChange={formik.handleChange}
+              value={formik.values.groupAdmin}
+            /> */}
+            {/* <Input
+              disabled
+              type="text"
+              label="Created At:"
+              name="date"
+              onChange={formik.handleChange}
+              value={formik.values.date}
+            /> */}
+            <div className="shadow-sm ">
+              <h2 className="flex items-center justify-between mb-3">
+                <p className="text-secondary text-xl font-semibold">
+                  All Group Members
+                </p>
+                <Button
+                  type={"button"}
+                  onClick={() => {
+                    setIsMember(false);
+
+                    let preMember = group.filter(
+                      (member) => member.email === formik.values.memberEmail
+                    );
+                    console.log(preMember.length);
+                    if (preMember.length === 0) {
+                      let filteredUser = users.filter(
+                        (user) => user.email === formik.values.memberEmail
+                      );
+                      setGroup([...group, filteredUser[0]]);
+                      console.log(group);
+                    } else {
+                      setIsMember(true);
+                    }
+                  }}
                 >
-                  {formik.values.members?.map((memberId) => (
+                  <div className="text-base p-1">Add User</div>
+                </Button>
+              </h2>
+
+              <div
+                className="flex flex-col gap-3 h-[45vh] pl-2 py-2 rounded border border-gray-500
+                lg:pl-4 lg:py-4
+                md:overflow-y-auto md:min-w-max scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-300 "
+              >
+                {group &&
+                  group?.map((member) => (
                     <AllMembersItems
-                      memberId={memberId}
+                      key={member._id}
+                      groupMember={member}
                       group={group}
                       setGroup={setGroup}
                     />
                   ))}
-                </div>
               </div>
             </div>
           </div>
@@ -164,7 +155,7 @@ const EditGroup = () => {
             <Button
               type="button"
               onClick={() => {
-                console.log(group.members);
+                // console.log(group.members);
                 setShowModal(true);
               }}
             >
@@ -179,6 +170,20 @@ const EditGroup = () => {
               <div className="text-base p-1">Cancel</div>
             </Button>
           </div>
+
+          <Backdrop
+            title="Duplicate"
+            show={isMember}
+            onClick={() => setIsMember(false)}
+          >
+            Cannot add the same member twice !
+            <div className="self-end">
+              <Button type={"button"} onClick={() => setIsMember(false)}>
+                OK
+              </Button>
+            </div>
+          </Backdrop>
+
           <Backdrop
             title="Update"
             show={showModal}

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Button = ({ children, alt, onClick, type, disabled }) => {
+const Button = ({ children, alt, onClick, type, disabled, scale }) => {
   return (
     <button
       className={`${
@@ -9,9 +9,10 @@ const Button = ({ children, alt, onClick, type, disabled }) => {
           : `text-white  ${
               disabled
                 ? "bg-primary opacity-60"
-                : "bg-primary hover:bg-primaryL hover:drop-shadow-xl hover:shadow-sm"
+                : ` active:scale-100  hover:scale-110
+                  bg-primary active:bg-primaryL hover:bg-primaryD hover:drop-shadow-xl hover:shadow-sm`
             } `
-      } transition-all duration-300 text-sm py-[6px] px-[12px] rounded-md`}
+      } transition-all duration-200 text-sm py-[6px] px-[12px] rounded-md`}
       disabled={disabled}
       onClick={onClick}
       type={type}

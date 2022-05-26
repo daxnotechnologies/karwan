@@ -7,38 +7,29 @@ import Button from "../UI/Button";
 import Backdrop from "../UI/BackdropModal";
 import InputFile from "../UI/InputFile";
 import useFetchDoc from "../../hooks/useFetchDoc";
-import useUser from "../../hooks/useUser";
-import userService from "../../api/videos.api";
+import videoService from "../../api/videos.api";
 
-const EditUser = () => {
+const EditVideo = () => {
   const navigate = useNavigate();
-  const { userId } = useParams();
+  const { videoId } = useParams();
 
-  const { docData: selectedUser, isloading } = useFetchDoc(
-    `/get-user/${userId}`
+  const { docData: selectedVideo, isloading } = useFetchDoc(
+    `/get-video/${videoId}`
   );
 
-  console.log(selectedUser);
+  console.log(selectedVideo);
 
-  const { updateUser, uploadUserImage, imagePath } = useUser();
-  const [profilePic, setProfilePic] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      userName: selectedUser?.userName,
-      email: selectedUser?.email,
-      contact: selectedUser?.contact,
-      address: selectedUser?.address,
-      profilePic: selectedUser?.profilePic,
+      videoLink: selectedVideo?.videoLink,
     },
     enableReinitialize: true,
-
     onSubmit: async (values) => {
       console.log(values);
-      await userService.updateUser(userId, values);
-      navigate("/dashboard/users");
-      // updateUser(values, userId, imagePath);
+      await videoService.updateVideo(videoId, values);
+      navigate("/dashboard/videos");
     },
   });
 
@@ -49,13 +40,13 @@ const EditUser = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col flex-wrap gap-6 px-6 lg:px-14"
         >
-          <h1 className="text-2xl">Edit User</h1>
+          <h1 className="text-2xl">Edit Video</h1>
           <section
             className={`flex flex-col flex-wrap gap-6 transition-opacity duration-500 ease-out
           ${isloading ? "opacity-50" : "opacity-100"}`}
           >
             <div className="flex items-center gap-6 mr-4">
-              {formik.values.profilePic ? (
+              {/* {formik.values.profilePic ? (
                 <img
                   src={formik.values.profilePic}
                   alt=""
@@ -63,7 +54,7 @@ const EditUser = () => {
                 />
               ) : (
                 <div className="h-14 w-14 bg-slate-300 rounded-full" />
-              )}
+              )} */}
               {/* <InputFile
                 name="imagePath"
                 imageName={profilePic?.name}
@@ -71,7 +62,7 @@ const EditUser = () => {
                   setProfilePic(e.target.files[0]);
                 }}
                 onUpload={() => {
-                  uploadUserImage(profilePic, userId);
+                  uploadUserImage(profilePic, videoId);
                 }}
               >
                 Upload
@@ -80,45 +71,12 @@ const EditUser = () => {
             <Input
               width="full"
               type="text"
-              name="userName"
-              label="Name:"
+              name="videoLink"
+              label="Video Link:"
               onChange={formik.handleChange}
-              value={formik.values.userName}
+              value={formik.values.videoLink}
             />
-            <Input
-              width="full"
-              type="text"
-              label="E-mail:"
-              name="email"
-              onChange={formik.handleChange}
-              value={formik.values.email}
-            />
-            <Input
-              width="full"
-              type="text"
-              label="Contact:"
-              name="contact"
-              onChange={formik.handleChange}
-              value={formik.values.contact}
-            />
-            <Input
-              width="full"
-              type="text"
-              label="Address"
-              name="address"
-              onChange={formik.handleChange}
-              value={formik.values.address}
-            />
-            {/* <TextArea
-            rows={1}
-            type="text"
-            label="Address:"
-            name="address"
-            onChange={formik.handleChange}
-            value={formik.values.address}
-          /> */}
           </section>
-
           <div className="flex justify-end gap-8 mt-4">
             <Button
               type="button"
@@ -131,7 +89,7 @@ const EditUser = () => {
             <Button
               type="button"
               onClick={() => {
-                navigate("/dashboard/users");
+                navigate("/dashboard/videos");
               }}
             >
               <div className="text-base p-1">Cancel</div>
@@ -142,7 +100,7 @@ const EditUser = () => {
             show={showModal}
             onClick={() => setShowModal(false)}
           >
-            Are you sure you want to update user details?
+            Are you sure you want to update Video Link?
             <div className="self-end">
               <Button type={"submit"} onClick={() => setShowModal(false)}>
                 OK
@@ -155,4 +113,4 @@ const EditUser = () => {
   );
 };
 
-export default EditUser;
+export default EditVideo;

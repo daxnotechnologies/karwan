@@ -9,9 +9,6 @@ import { jobs, jobsApplied } from "../Components/DummyData/jobs";
 import { useNavigate } from "react-router-dom";
 
 const AddJob = () => {
-  const navigate = useNavigate;
-  const dispatch = useDispatch();
-
   const formik = useFormik({
     initialValues: {
       studentName: "",
