@@ -30,13 +30,6 @@ const EditGroup = () => {
     setGroup(selectedGroup?.groupMembers);
   }, [selectedGroup?.groupMembers]);
 
-  const addUser = (selectedUser) => {
-    let filteredUser = users.filter((user) => user.email === selectedUser);
-    console.log(filteredUser);
-    // let newGroup = group.push(filteredUser);
-    // setGroup(newGroup);
-  };
-
   console.log(group);
   const formik = useFormik({
     initialValues: {

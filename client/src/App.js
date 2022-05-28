@@ -15,6 +15,8 @@ import EditGroup from "./Components/DisplayItems/EditGroup";
 import EditBook from "./Components/DisplayItems/EditBook";
 import EditBookRequest from "./Components/DisplayItems/EditBookRequest";
 import EditVideo from "./Components/DisplayItems/EditVideo";
+import AllProductCarts from "./Pages/AllProductCarts";
+import EditProductCart from "./Components/DisplayItems/EditProductCart";
 
 function App() {
   // const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -27,6 +29,10 @@ function App() {
             <Route index element={<AllVideos />} />
             <Route path="/dashboard/videos" element={<AllVideos />} />
             <Route path="/dashboard/books" element={<AllBooks />} />
+            <Route
+              path="/dashboard/productCarts"
+              element={<AllProductCarts />}
+            />
             <Route path="/dashboard/groups" element={<AllGroups />} />
             <Route path="/dashboard/users" element={<Users />} />
             <Route
@@ -43,6 +49,10 @@ function App() {
 
             <Route path="/dashboard/edit-user/:userId" element={<EditUser />} />
             <Route path="/dashboard/edit-book/:bookId" element={<EditBook />} />
+            <Route
+              path="/dashboard/edit-productCart/:productCartId"
+              element={<EditProductCart />}
+            />
             <Route
               path="/dashboard/edit-video/:videoId"
               element={<EditVideo />}

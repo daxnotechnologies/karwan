@@ -26,12 +26,13 @@ const Sidebar = (props) => {
     { key: "1", name: "Videos", route: "/dashboard" },
     { key: "2", name: "Add Video", route: "/dashboard/add-video" },
     { key: "3", name: "Visa Requests", route: "/dashboard/visa-requests" },
-    { key: "4", name: "Books", route: "/dashboard/books" },
-    { key: "5", name: "Groups", route: "/dashboard/groups" },
-    { key: "6", name: "Add Group", route: "/dashboard/add-group" },
-    { key: "7", name: "Users", route: "/dashboard/users" },
-    { key: "8", name: "Request Book", route: "/dashboard/book-requests" },
-    { key: "9", name: "Logout", route: "/", logout: true },
+    { key: "4", name: "Product Carts", route: "/dashboard/productCarts" },
+    { key: "5", name: "Books", route: "/dashboard/books" },
+    { key: "6", name: "Groups", route: "/dashboard/groups" },
+    { key: "7", name: "Add Group", route: "/dashboard/add-group" },
+    { key: "8", name: "Users", route: "/dashboard/users" },
+    { key: "9", name: "Request Book", route: "/dashboard/book-requests" },
+    { key: "10", name: "Logout", route: "/", logout: true },
   ];
 
   return (
