@@ -17,6 +17,13 @@ import EditBookRequest from "./Components/DisplayItems/EditBookRequest";
 import EditVideo from "./Components/DisplayItems/EditVideo";
 import AllProductCarts from "./Pages/AllProductCarts";
 import EditProductCart from "./Components/DisplayItems/EditProductCart";
+import AllSupplications from "./Pages/AllSupplications";
+import EditSupplication from "./Components/DisplayItems/EditSupplication";
+import AddUser from "./Pages/AddUser";
+import AllProducts from "./Pages/AllProducts";
+import EditProduct from "./Components/DisplayItems/EditProduct";
+import AddProduct from "./Pages/AddProduct";
+import AddSupplication from "./Pages/AddSupplication";
 
 function App() {
   // const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -28,7 +35,9 @@ function App() {
           <Route path="/dashboard" element={<MainPage />}>
             <Route index element={<AllVideos />} />
             <Route path="/dashboard/videos" element={<AllVideos />} />
+            <Route path="/dashboard/duas" element={<AllSupplications />} />
             <Route path="/dashboard/books" element={<AllBooks />} />
+            <Route path="/dashboard/products" element={<AllProducts />} />
             <Route
               path="/dashboard/productCarts"
               element={<AllProductCarts />}
@@ -45,10 +54,17 @@ function App() {
             />
 
             <Route path="/dashboard/add-video" element={<AddVideo />} />
+            <Route path="/dashboard/add-user" element={<AddUser />} />
+            <Route path="/dashboard/add-product" element={<AddProduct />} />
+            <Route path="/dashboard/add-dua" element={<AddSupplication />} />
             <Route path="/dashboard/add-group" element={<AddGroup />} />
 
             <Route path="/dashboard/edit-user/:userId" element={<EditUser />} />
             <Route path="/dashboard/edit-book/:bookId" element={<EditBook />} />
+            <Route
+              path="/dashboard/edit-product/:productId"
+              element={<EditProduct />}
+            />
             <Route
               path="/dashboard/edit-productCart/:productCartId"
               element={<EditProductCart />}
@@ -56,6 +72,10 @@ function App() {
             <Route
               path="/dashboard/edit-video/:videoId"
               element={<EditVideo />}
+            />
+            <Route
+              path="/dashboard/edit-dua/:supplicationId"
+              element={<EditSupplication />}
             />
             <Route
               path="/dashboard/edit-group/:groupId"

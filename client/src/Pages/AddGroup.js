@@ -1,32 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Input from "../Components/UI/Input";
 import Card from "../Components/UI/Card";
-import TextArea from "../Components/UI/TextArea";
+
 import Button from "../Components/UI/Button";
 import Backdrop from "../Components/UI/BackdropModal";
 
 import { useFormik } from "formik";
-import useFetchDoc from "../hooks/useFetchDoc";
+
 import useFetch from "../hooks/useFetch";
 import groupService from "../api/groups.api";
 import AllMembersItems from "../Components/DisplayItems/AllMembersItems";
 
 const AddGroup = () => {
   const navigate = useNavigate();
-  const { groupId } = useParams();
+
   const [showModal, setShowModal] = useState(false);
   const [group, setGroup] = useState([]);
   const [isMember, setIsMember] = useState(false);
 
   const { data: users } = useFetch(`/get-users`, true);
-
   // console.log(users);
-
-  /* useEffect(() => {
-    setGroup(selectedGroup?.groupMembers);
-  }, [selectedGroup?.groupMembers]); */
 
   console.log(group);
   const formik = useFormik({
@@ -37,11 +32,11 @@ const AddGroup = () => {
     },
     // enableReinitialize: true,
     onSubmit: async (values) => {
-      /* await groupService.addGroup({
+      await groupService.addGroup({
         groupName: values.groupName,
         groupMembers: group,
       });
-      navigate("/dashboard/groups"); */
+      navigate("/dashboard/groups");
     },
   });
 
@@ -69,23 +64,6 @@ const AddGroup = () => {
               onChange={formik.handleChange}
               value={formik.values.memberEmail}
             />
-
-            {/* <Input
-              disabled
-              type="text"
-              name="groupAdmin"
-              label="Admin:"
-              onChange={formik.handleChange}
-              value={formik.values.groupAdmin}
-            /> */}
-            {/* <Input
-              disabled
-              type="text"
-              label="Created At:"
-              name="date"
-              onChange={formik.handleChange}
-              value={formik.values.date}
-            /> */}
             <div className="shadow-sm ">
               <h2 className="flex items-center justify-between mb-3">
                 <p className="text-secondary text-xl font-semibold">
@@ -137,20 +115,12 @@ const AddGroup = () => {
             <Button
               type="button"
               onClick={() => {
-                // console.log(group.members);
-                // setShowModal(true);
+                console.log(group.members);
+                setShowModal(true);
               }}
             >
               <div className="text-base p-1">Add Group</div>
             </Button>
-            {/* <Button
-              type="button"
-              onClick={() => {
-                navigate("/dashboard/groups");
-              }}
-            >
-              <div className="text-base p-1">Cancel</div>
-            </Button> */}
           </div>
 
           <Backdrop

@@ -6,6 +6,7 @@ import Backdrop from "./Backdrop";
 import { useSelector } from "react-redux";
 import { auth } from "../../api/firebase-config";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import logo from "../../Assets/Images/logo.png";
 
 const Sidebar = (props) => {
   const navigate = useNavigate();
@@ -23,16 +24,21 @@ const Sidebar = (props) => {
   };
 
   const sidebarList = [
-    { key: "1", name: "Videos", route: "/dashboard" },
-    { key: "2", name: "Add Video", route: "/dashboard/add-video" },
+    { key: "1", name: "Users", route: "/dashboard/users" },
+    { key: "2", name: "Add User", route: "/dashboard/add-user" },
     { key: "3", name: "Visa Requests", route: "/dashboard/visa-requests" },
-    { key: "4", name: "Product Carts", route: "/dashboard/productCarts" },
-    { key: "5", name: "Books", route: "/dashboard/books" },
-    { key: "6", name: "Groups", route: "/dashboard/groups" },
-    { key: "7", name: "Add Group", route: "/dashboard/add-group" },
-    { key: "8", name: "Users", route: "/dashboard/users" },
-    { key: "9", name: "Request Book", route: "/dashboard/book-requests" },
-    { key: "10", name: "Logout", route: "/", logout: true },
+    { key: "4", name: "Groups", route: "/dashboard/groups" },
+    { key: "5", name: "Add Group", route: "/dashboard/add-group" },
+    { key: "6", name: "Videos", route: "/dashboard" },
+    { key: "7", name: "Add Video", route: "/dashboard/add-video" },
+    { key: "8", name: "Duas", route: "/dashboard/duas" },
+    { key: "9", name: "Add Dua", route: "/dashboard/add-dua" },
+    { key: "10", name: "Products", route: "/dashboard/products" },
+    { key: "11", name: "Add Product", route: "/dashboard/add-product" },
+    { key: "12", name: "Orders", route: "/dashboard/productCarts" },
+    { key: "13", name: "Books", route: "/dashboard/books" },
+    { key: "14", name: "Book Requests", route: "/dashboard/book-requests" },
+    { key: "15", name: "Logout", route: "/", logout: true },
   ];
 
   return (
@@ -59,17 +65,17 @@ const Sidebar = (props) => {
           />
           <div className="flex flex-col gap-4">
             <img
-              src={user?.photoURL || profile}
+              src={logo}
               alt="pic"
               className="object-contain h-20 self-start rounded-xl"
             />
             <h2 className="text-3xl text-white break-all">
-              {user?.displayName || "Admin"}
+              Karwan-e-Hasnath Team
             </h2>
           </div>
-          <p className="text-base break-all text-slate-200">
+          {/* <p className="text-base break-all text-slate-200">
             {user?.email || "admin@gmail.com"}
-          </p>
+          </p> */}
         </div>
 
         <ul className="flex flex-col gap-8">
@@ -107,37 +113,27 @@ const Sidebar = (props) => {
         <div className="hidden sm:flex sm:flex-col sm:gap-14 sm:text-3xl sm:min-h-full sm:max-w-72 sm:p-4 lg:p-10">
           <div className="flex flex-col gap-2">
             <div className="flex flex-col gap-4">
-              {user?.photoURL ? (
-                <img
-                  src={user?.photoURL}
-                  alt=""
-                  className="object-cover h-24 w-24 rounded-full"
-                />
-              ) : (
-                <div className="h-24 w-24 bg-white rounded-full grid place-content-center">
-                  <p className="text-primary font-semibold text-5xl"> AD</p>
-                </div>
-              )}
-              {/* <img
-                src={user?.photoURL || profile}
+              <img
+                src={logo}
                 alt="pic"
                 className="object-contain h-24 self-start rounded-xl"
-              /> */}
-              <h2 className="text-3xl text-white break-all">
-                {user?.displayName || "Admin"}
+              />
+              <h2 className="text-base text-white break-all">
+                Karwan-e-Hasnath
               </h2>
             </div>
-            <p className="text-base break-all text-slate-200">
-              {user?.email || "admin@gmail.com"}
-            </p>
           </div>
-          <ul className="w-full max-w-[180px]">
+          <ul
+            className="w-full max-w-[180px] md:max-h-[60vh] xl:max-h-[60vh]
+            md:overflow-y-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-primary"
+          >
             {sidebarList.map((item) => {
               return (
                 <div
                   key={item.key}
                   className={`mb-4 rounded ease-in-out transition-all duration-150
                   hover:bg-slate-100 hover:bg-opacity-20 hover:pl-4
+                  
                   ${
                     location.pathname === item.route &&
                     "bg-slate-100 bg-opacity-20 pl-4"

@@ -8,6 +8,7 @@ import { auth } from "../api/firebase-config";
 import Input from "../Components/UI/Input";
 import Button from "../Components/UI/Button";
 import { setUser } from "../redux/userSlice";
+import logo from "../Assets/Images/logo.png";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const Login = () => {
       const user = await signInWithEmailAndPassword(auth, email, password);
       console.log(user);
       localStorage.setItem("isLoggedIn", true);
-      navigate("/dashboard");
+      navigate("/dashboard/users");
     } catch (error) {
       console.log(error.message);
       alert("invalid");
@@ -47,7 +48,11 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-primaryL w-[100vw] h-[100vh] pt-[25vh]">
+    <div className="bg-primaryL w-[100vw] h-[100vh] pt-[10vh]">
+      <div className="flex flex-col items-center justify-center gap-2 p-4 w-[80%] max-w-md mx-auto ">
+        <img src={logo} alt="pic" className="object-contain h-28 rounded-xl" />
+        <h2 className="text-white text-lg">Karwan-e-Hasnath</h2>
+      </div>
       <div
         className=" p-8 w-[80%] max-w-md mx-auto  
         border rounded-md  bg-white

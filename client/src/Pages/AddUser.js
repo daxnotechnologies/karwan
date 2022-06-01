@@ -1,44 +1,43 @@
 import React, { useState } from "react";
-import Input from "../UI/Input";
 import { useFormik } from "formik";
-import { useNavigate, useParams } from "react-router-dom";
-import Card from "../UI/Card";
-import Button from "../UI/Button";
-import Backdrop from "../UI/BackdropModal";
+import { useNavigate } from "react-router-dom";
+import Input from "../Components/UI/Input";
+import Card from "../Components/UI/Card";
+import Button from "../Components/UI/Button";
+import Backdrop from "../Components/UI/BackdropModal";
+import InputFile from "../Components/UI/InputFile";
+import userService from "../api/users.api";
 
-import useFetchDoc from "../../hooks/useFetchDoc";
-import useUser from "../../hooks/useUser";
-import userService from "../../api/users.api";
-
-const EditUser = () => {
+const AddUser = () => {
   const navigate = useNavigate();
-  const { userId } = useParams();
 
-  const { docData: selectedUser, isloading } = useFetchDoc(
-    `/get-user/${userId}`
-  );
-
-  console.log(selectedUser);
-
-  const { updateUser, uploadUserImage, imagePath } = useUser();
   const [profilePic, setProfilePic] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      userName: selectedUser?.userName,
-      email: selectedUser?.email,
-      contact: selectedUser?.contact,
-      address: selectedUser?.address,
-      profilePic: selectedUser?.profilePic,
+      userName: "",
+      email: "",
+      contact: "",
+      address: "",
+      profilePic: "",
+      password: "",
     },
     enableReinitialize: true,
 
     onSubmit: async (values) => {
       console.log(values);
-      await userService.updateUser(userId, values);
-      navigate("/dashboard/users");
-      // updateUser(values, userId, imagePath);
+      if (
+        values.userName &&
+        values.email &&
+        values.contact &&
+        values.address &&
+        values.password
+      ) {
+        await userService.addUser(values);
+        navigate("/dashboard/users");
+        // updateUser(values, userId, imagePath);
+      }
     },
   });
 
@@ -50,10 +49,7 @@ const EditUser = () => {
           className="flex flex-col flex-wrap gap-6 px-6 lg:px-14"
         >
           <h1 className="text-2xl">Edit User</h1>
-          <section
-            className={`flex flex-col flex-wrap gap-6 transition-opacity duration-500 ease-out
-          ${isloading ? "opacity-50" : "opacity-100"}`}
-          >
+          <section className={`flex flex-col flex-wrap gap-6`}>
             <div className="flex items-center gap-6 mr-4">
               {formik.values.profilePic ? (
                 <img
@@ -64,18 +60,18 @@ const EditUser = () => {
               ) : (
                 <div className="h-14 w-14 bg-slate-300 rounded-full" />
               )}
-              {/* <InputFile
+              <InputFile
                 name="imagePath"
                 imageName={profilePic?.name}
                 onChange={(e) => {
                   setProfilePic(e.target.files[0]);
                 }}
                 onUpload={() => {
-                  uploadUserImage(profilePic, userId);
+                  // uploadUserImage(profilePic, userId);
                 }}
               >
                 Upload
-              </InputFile> */}
+              </InputFile>
             </div>
             <Input
               width="full"
@@ -109,14 +105,14 @@ const EditUser = () => {
               onChange={formik.handleChange}
               value={formik.values.address}
             />
-            {/* <TextArea
-            rows={1}
-            type="text"
-            label="Address:"
-            name="address"
-            onChange={formik.handleChange}
-            value={formik.values.address}
-          /> */}
+            <Input
+              width="full"
+              type="text"
+              label="Password"
+              name="password"
+              onChange={formik.handleChange}
+              value={formik.values.password}
+            />
           </section>
 
           <div className="flex justify-end gap-8 mt-4">
@@ -126,23 +122,15 @@ const EditUser = () => {
                 setShowModal(true);
               }}
             >
-              <div className="text-base p-1">Update</div>
-            </Button>
-            <Button
-              type="button"
-              onClick={() => {
-                navigate("/dashboard/users");
-              }}
-            >
-              <div className="text-base p-1">Cancel</div>
+              <div className="text-base p-1">Add User</div>
             </Button>
           </div>
           <Backdrop
-            title="Update"
+            title="Add"
             show={showModal}
             onClick={() => setShowModal(false)}
           >
-            Are you sure you want to update user details?
+            Are you sure you want to add this user?
             <div className="self-end">
               <Button type={"submit"} onClick={() => setShowModal(false)}>
                 OK
@@ -155,4 +143,4 @@ const EditUser = () => {
   );
 };
 
-export default EditUser;
+export default AddUser;

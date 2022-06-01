@@ -7,38 +7,36 @@ import Button from "../UI/Button";
 import Backdrop from "../UI/BackdropModal";
 
 import useFetchDoc from "../../hooks/useFetchDoc";
-import useUser from "../../hooks/useUser";
-import userService from "../../api/users.api";
+import InputFile from "../UI/InputFile";
+import TextArea from "../UI/TextArea";
+import productService from "../../api/productService";
 
-const EditUser = () => {
+const EditProduct = () => {
   const navigate = useNavigate();
-  const { userId } = useParams();
+  const { productId } = useParams();
 
-  const { docData: selectedUser, isloading } = useFetchDoc(
-    `/get-user/${userId}`
+  const { docData: product, isloading } = useFetchDoc(
+    `/get-product/${productId}`
   );
 
-  console.log(selectedUser);
+  console.log(product);
 
-  const { updateUser, uploadUserImage, imagePath } = useUser();
   const [profilePic, setProfilePic] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      userName: selectedUser?.userName,
-      email: selectedUser?.email,
-      contact: selectedUser?.contact,
-      address: selectedUser?.address,
-      profilePic: selectedUser?.profilePic,
+      title: product?.title,
+      price: product?.price,
+      description: product?.description,
+      rating: product?.rating,
+      productImage: product?.productImage,
     },
     enableReinitialize: true,
-
     onSubmit: async (values) => {
       console.log(values);
-      await userService.updateUser(userId, values);
-      navigate("/dashboard/users");
-      // updateUser(values, userId, imagePath);
+      await productService.updateProduct(productId, values);
+      navigate("/dashboard/products");
     },
   });
 
@@ -55,68 +53,60 @@ const EditUser = () => {
           ${isloading ? "opacity-50" : "opacity-100"}`}
           >
             <div className="flex items-center gap-6 mr-4">
-              {formik.values.profilePic ? (
+              {product?.productImage || formik.values.profilePic ? (
                 <img
-                  src={formik.values.profilePic}
+                  src={product?.productImage || formik.values.profilePic}
                   alt=""
                   className="object-cover h-14 w-14 rounded-full"
                 />
               ) : (
                 <div className="h-14 w-14 bg-slate-300 rounded-full" />
               )}
-              {/* <InputFile
+              <InputFile
                 name="imagePath"
                 imageName={profilePic?.name}
                 onChange={(e) => {
                   setProfilePic(e.target.files[0]);
                 }}
                 onUpload={() => {
-                  uploadUserImage(profilePic, userId);
+                  // uploadUserImage(profilePic, productId);
                 }}
               >
                 Upload
-              </InputFile> */}
+              </InputFile>
             </div>
             <Input
               width="full"
               type="text"
-              name="userName"
-              label="Name:"
+              label="Title:"
+              name="title"
               onChange={formik.handleChange}
-              value={formik.values.userName}
+              value={formik.values.title}
             />
             <Input
               width="full"
-              type="text"
-              label="E-mail:"
-              name="email"
+              type="number"
+              label="Price:"
+              name="price"
               onChange={formik.handleChange}
-              value={formik.values.email}
+              value={formik.values.price}
             />
             <Input
               width="full"
-              type="text"
-              label="Contact:"
-              name="contact"
+              type="number"
+              label="Rating:"
+              name="rating"
               onChange={formik.handleChange}
-              value={formik.values.contact}
+              value={formik.values.rating}
             />
-            <Input
-              width="full"
+            <TextArea
+              rows={4}
               type="text"
-              label="Address"
-              name="address"
+              label="Description:"
+              name="description"
               onChange={formik.handleChange}
-              value={formik.values.address}
+              value={formik.values.description}
             />
-            {/* <TextArea
-            rows={1}
-            type="text"
-            label="Address:"
-            name="address"
-            onChange={formik.handleChange}
-            value={formik.values.address}
-          /> */}
           </section>
 
           <div className="flex justify-end gap-8 mt-4">
@@ -131,7 +121,7 @@ const EditUser = () => {
             <Button
               type="button"
               onClick={() => {
-                navigate("/dashboard/users");
+                navigate("/dashboard/products");
               }}
             >
               <div className="text-base p-1">Cancel</div>
@@ -142,7 +132,7 @@ const EditUser = () => {
             show={showModal}
             onClick={() => setShowModal(false)}
           >
-            Are you sure you want to update user details?
+            Are you sure you want to update product details?
             <div className="self-end">
               <Button type={"submit"} onClick={() => setShowModal(false)}>
                 OK
@@ -155,4 +145,4 @@ const EditUser = () => {
   );
 };
 
-export default EditUser;
+export default EditProduct;
