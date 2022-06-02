@@ -11,8 +11,8 @@ import userService from "../api/users.api";
 const AddUser = () => {
   const navigate = useNavigate();
 
-  const [profilePic, setProfilePic] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [profilePic, setProfilePic] = useState(null);
   const [fileBase64String, setFileBase64String] = useState("");
 
   const encodeFileBase64 = (file) => {

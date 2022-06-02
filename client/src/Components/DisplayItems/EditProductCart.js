@@ -5,28 +5,22 @@ import { useFormik } from "formik";
 
 import { useNavigate, useParams } from "react-router-dom";
 import Card from "../UI/Card";
-import TextArea from "../UI/TextArea";
 import Button from "../UI/Button";
 import Backdrop from "../UI/BackdropModal";
-import AllMembersItems from "./AllMembersItems";
 import useFetchDoc from "../../hooks/useFetchDoc";
-import useFetch from "../../hooks/useFetch";
-import groupService from "../../api/groups.api";
 import productCartService from "../../api/productCart.api";
 import AllProductsItems from "./AllProductsItems";
+import Select from "../UI/Select";
 
 const EditProductCart = () => {
   const navigate = useNavigate();
   const { productCartId } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [productCart, setProductCart] = useState([]);
-  const [isMember, setIsMember] = useState(false);
+
   const { docData: selectedProductCart, isloading } = useFetchDoc(
     `/get-productCart/${productCartId}`
   );
-  const { data: allProductCarts } = useFetch(`/get-productCarts`, true);
-
-  // console.log(productCarts);
 
   const totalCartPrice = (cart) => {
     if (cart) {
@@ -48,13 +42,15 @@ const EditProductCart = () => {
     initialValues: {
       userName: selectedProductCart?.user_id?.userName,
       profilePic: selectedProductCart?.user_id?.profilePic,
+      status: selectedProductCart?.status,
       productCart: productCart,
     },
     enableReinitialize: true,
     onSubmit: async (values) => {
-      /* await productCartService.updateProductCart(productCartId, {
-        products: productCart,
-      }); */
+      console.log(values);
+      await productCartService.updateProductCart(productCartId, {
+        status: values.status,
+      });
       navigate("/dashboard/productCarts");
     },
   });
@@ -92,35 +88,27 @@ const EditProductCart = () => {
               onChange={formik.handleChange}
               value={formik.values.userName}
             />
+            <div>
+              <Select
+                type="text"
+                label="Status:"
+                name="status"
+                onChange={formik.handleChange}
+                value={formik.values.status}
+              >
+                <option value={"Pending"}>Pending</option>
+                <option value={"Awaiting Payment"}>Awaiting Payment</option>
+                <option value={"Completed"}>Completed</option>
+                <option value={"Canceled"}>Canceled</option>
+              </Select>
+            </div>
             <div className="shadow-sm">
               <h2 className="flex items-center justify-between mb-3">
                 <p className="text-secondary text-xl font-semibold">Products</p>
-                {/* <Button
-                  type={"button"}
-                  onClick={() => {
-                    setIsMember(false);
-
-                    let preMember = group.filter(
-                      (member) => member.email === formik.values.memberEmail
-                    );
-                    console.log(preMember.length);
-                    if (preMember.length === 0) {
-                      let filteredUser = productCarts.filter(
-                        (user) => user.email === formik.values.memberEmail
-                      );
-                      setGroup([...group, filteredUser[0]]);
-                      console.log(group);
-                    } else {
-                      setIsMember(true);
-                    }
-                  }}
-                >
-                  <div className="text-base p-1">Add User</div>
-                </Button> */}
               </h2>
 
               <div
-                className={`flex flex-col gap-3 h-[45vh] pl-2 py-2 rounded border border-gray-500
+                className={`flex flex-col gap-3 h-[35vh] pl-2 py-2 rounded border border-gray-500
                 md:overflow-y-auto md:min-w-max lg:pl-4 lg:py-4
                 scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-300  
                 transition-opacity duration-500 ease-out ${
@@ -147,7 +135,6 @@ const EditProductCart = () => {
               <p className=" text-primary font-semibold text-lg">
                 Rs. {totalCartPrice(productCart)}
               </p>
-              <p></p>
             </div>
           </div>
 
@@ -155,11 +142,10 @@ const EditProductCart = () => {
             <Button
               type="button"
               onClick={() => {
-                // console.log(group.members);
                 setShowModal(true);
               }}
             >
-              <div className="text-base p-1">Approve</div>
+              <div className="text-base p-1">Update</div>
             </Button>
             <Button
               type="button"
@@ -170,19 +156,6 @@ const EditProductCart = () => {
               <div className="text-base p-1">Cancel</div>
             </Button>
           </div>
-
-          {/* <Backdrop
-            title="Duplicate"
-            show={isMember}
-            onClick={() => setIsMember(false)}
-          >
-            Cannot add the same member twice !
-            <div className="self-end">
-              <Button type={"button"} onClick={() => setIsMember(false)}>
-                OK
-              </Button>
-            </div>
-          </Backdrop> */}
 
           <Backdrop
             title="Approve"

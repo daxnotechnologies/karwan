@@ -12,7 +12,7 @@ const ProductCartsItems = ({ productCart, check, setCheck }) => {
   return (
     <>
       <div className="grid grid-cols-12 place-items-center text-center">
-        <div className="col-span-7 lg:col-span-9 flex place-self-start text-left font-semibold text-primary">
+        <div className="col-span-6 lg:col-span-8 flex place-self-start text-left font-semibold text-primary">
           <div className="grid place-items-center mr-4">
             {productCart?.user_id?.profilePic ? (
               <img
@@ -42,10 +42,17 @@ const ProductCartsItems = ({ productCart, check, setCheck }) => {
               navigate(`/dashboard/edit-productCart/${productCart._id}`);
             }}
           >
-            Approve
+            Details
           </Button>
         </div>
-        <div className="col-span-3 lg:col-span-2">
+        <div className="col-span-4 lg:col-span-3">
+          <div className="flex items-center">
+            <p className="text-primary text-[16px] font-semibold opacity-70">
+              {productCart?.status}
+            </p>
+          </div>
+        </div>
+        {/* <div className="col-span-3 lg:col-span-2">
           <Button
             alt
             onClick={() => {
@@ -54,7 +61,7 @@ const ProductCartsItems = ({ productCart, check, setCheck }) => {
           >
             Delete
           </Button>
-        </div>
+        </div> */}
       </div>
       <Backdrop
         title="Delete User!"

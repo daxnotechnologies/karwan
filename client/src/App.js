@@ -24,6 +24,8 @@ import AllProducts from "./Pages/AllProducts";
 import EditProduct from "./Components/DisplayItems/EditProduct";
 import AddProduct from "./Pages/AddProduct";
 import AddSupplication from "./Pages/AddSupplication";
+import AllBanners from "./Pages/AllBanners";
+import AddBanner from "./Pages/AddBanner";
 
 function App() {
   // const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -38,6 +40,7 @@ function App() {
             <Route path="/dashboard/duas" element={<AllSupplications />} />
             <Route path="/dashboard/books" element={<AllBooks />} />
             <Route path="/dashboard/products" element={<AllProducts />} />
+            <Route path="/dashboard/banners" element={<AllBanners />} />
             <Route
               path="/dashboard/productCarts"
               element={<AllProductCarts />}
@@ -55,6 +58,7 @@ function App() {
 
             <Route path="/dashboard/add-video" element={<AddVideo />} />
             <Route path="/dashboard/add-user" element={<AddUser />} />
+            <Route path="/dashboard/add-banner" element={<AddBanner />} />
             <Route path="/dashboard/add-product" element={<AddProduct />} />
             <Route path="/dashboard/add-dua" element={<AddSupplication />} />
             <Route path="/dashboard/add-group" element={<AddGroup />} />

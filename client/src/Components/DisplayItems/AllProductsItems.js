@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import Backdrop from "../UI/BackdropModal";
 import Button from "../UI/Button";
+import Select from "../UI/Select";
 
 const AllProductsItems = ({ product, productCart, setProductCart }) => {
   let navigate = useNavigate();
@@ -44,6 +45,7 @@ const AllProductsItems = ({ product, productCart, setProductCart }) => {
           <p className="text-secondary font-semibold">x {product?.amount}</p>
         </div>
       </div>
+
       <Backdrop
         title="Remove User!"
         show={showModal}
