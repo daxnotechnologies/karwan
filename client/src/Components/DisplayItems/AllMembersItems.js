@@ -24,19 +24,12 @@ const AllMembersItems = ({ groupMember, group, setGroup }) => {
               <div className="h-14 w-14 bg-slate-300 rounded-full" />
             )}
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col items-center">
             <p>{groupMember?.userName}</p>
-            <div className="flex items-center gap-2">
-              <p className=" text-[#404852] text-[12px]">{"5:12 pm"}</p>
-              <p className=" text-[#404852] self-end">.</p>
-              <p className="text-primary text-[12px] font-semibold opacity-70">
-                {"Details"}
-              </p>
-            </div>
           </div>
         </div>
 
-        <div className="col-span-2 lg:col-span-1">
+        {/* <div className="col-span-2 lg:col-span-1">
           <Button
             onClick={() => {
               // navigate(`/dashboard/edit-groupMember/${groupMember._id}`);
@@ -44,8 +37,8 @@ const AllMembersItems = ({ groupMember, group, setGroup }) => {
           >
             Edit
           </Button>
-        </div>
-        <div className="col-span-3 lg:col-span-2">
+        </div> */}
+        <div className="col-span-5 lg:col-span-3">
           <Button
             alt
             type={"button"}

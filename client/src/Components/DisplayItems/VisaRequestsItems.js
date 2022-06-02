@@ -33,7 +33,7 @@ const VisaRequestsItems = ({ visa, check, setCheck }) => {
           <div className="flex flex-col gap-2">
             <p>{visa?.fullName}</p>
             <div className="flex items-center gap-2">
-              <p className=" text-[#404852] text-[14px]">{"Visa Type :"}</p>
+              <p className=" text-[#404852] text-[14px]">Visa Type :</p>
               <p className="text-primary text-[14px] font-semibold opacity-70">
                 {visa?.visaType}
               </p>

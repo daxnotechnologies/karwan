@@ -25,18 +25,8 @@ const AllUsersItems = ({ user, check, setCheck }) => {
               <div className="h-14 w-14 bg-slate-300 rounded-full" />
             )}
           </div>
-          <div className="flex flex-col gap-2">
-            <p>{user?.userName}</p>
-            <div className="flex items-center gap-2">
-              <p className=" text-[#404852] text-[12px]">{"5:12 pm"}</p>
-              <p className=" text-[#404852] self-end">.</p>
-              <p className="text-primary text-[12px] font-semibold opacity-70">
-                {"Details"}
-              </p>
-            </div>
-          </div>
+          <p className="flex items-center">{user?.userName}</p>
         </div>
-
         <div className="col-span-2 lg:col-span-1">
           <Button
             onClick={() => {
