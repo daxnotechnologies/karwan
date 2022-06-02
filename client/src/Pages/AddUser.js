@@ -13,6 +13,22 @@ const AddUser = () => {
 
   const [profilePic, setProfilePic] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [fileBase64String, setFileBase64String] = useState("");
+
+  const encodeFileBase64 = (file) => {
+    var reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        var Base64 = reader.result;
+        console.log(Base64);
+        setFileBase64String(Base64);
+      };
+      reader.onerror = (error) => {
+        console.log("error: ", error);
+      };
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -20,7 +36,7 @@ const AddUser = () => {
       email: "",
       contact: "",
       address: "",
-      profilePic: "",
+      profilePic: fileBase64String,
       password: "",
     },
     enableReinitialize: true,
@@ -32,11 +48,11 @@ const AddUser = () => {
         values.email &&
         values.contact &&
         values.address &&
-        values.password
+        values.password &&
+        values.profilePic
       ) {
         await userService.addUser(values);
         navigate("/dashboard/users");
-        // updateUser(values, userId, imagePath);
       }
     },
   });
@@ -48,12 +64,12 @@ const AddUser = () => {
           onSubmit={formik.handleSubmit}
           className="flex flex-col flex-wrap gap-6 px-6 lg:px-14"
         >
-          <h1 className="text-2xl">Edit User</h1>
+          <h1 className="text-2xl">Add User</h1>
           <section className={`flex flex-col flex-wrap gap-6`}>
             <div className="flex items-center gap-6 mr-4">
-              {formik.values.profilePic ? (
+              {fileBase64String ? (
                 <img
-                  src={formik.values.profilePic}
+                  src={fileBase64String}
                   alt=""
                   className="object-cover h-14 w-14 rounded-full"
                 />
@@ -67,7 +83,7 @@ const AddUser = () => {
                   setProfilePic(e.target.files[0]);
                 }}
                 onUpload={() => {
-                  // uploadUserImage(profilePic, userId);
+                  encodeFileBase64(profilePic);
                 }}
               >
                 Upload

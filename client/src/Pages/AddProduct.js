@@ -12,8 +12,24 @@ import Backdrop from "../Components/UI/BackdropModal";
 const AddProduct = () => {
   const navigate = useNavigate();
 
-  const [profilePic, setProfilePic] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [productPic, setProductPic] = useState(null);
+  const [fileBase64String, setFileBase64String] = useState("");
+
+  const encodeFileBase64 = (file) => {
+    var reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        var Base64 = reader.result;
+        console.log(Base64);
+        setFileBase64String(Base64);
+      };
+      reader.onerror = (error) => {
+        console.log("error: ", error);
+      };
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -21,8 +37,7 @@ const AddProduct = () => {
       price: 0,
       description: "",
       rating: 0,
-      productImage:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp1T0X2j9sywG32yT3SwJprHdnYvbXfXIq2g&usqp=CAU",
+      productImage: fileBase64String,
     },
     enableReinitialize: true,
     onSubmit: async (values) => {
@@ -32,6 +47,7 @@ const AddProduct = () => {
         values.price &&
         values.description &&
         values.rating &&
+        values.productImage &&
         values.productImage
       ) {
         await productService.addProduct(values);
@@ -50,9 +66,9 @@ const AddProduct = () => {
           <h1 className="text-2xl">Edit User</h1>
           <section className={`flex flex-col flex-wrap gap-6 `}>
             <div className="flex items-center gap-6 mr-4">
-              {formik.values.profilePic ? (
+              {fileBase64String ? (
                 <img
-                  src={formik.values.profilePic}
+                  src={fileBase64String}
                   alt=""
                   className="object-cover h-14 w-14 rounded-full"
                 />
@@ -61,12 +77,12 @@ const AddProduct = () => {
               )}
               <InputFile
                 name="imagePath"
-                imageName={profilePic?.name}
+                imageName={productPic?.name}
                 onChange={(e) => {
-                  setProfilePic(e.target.files[0]);
+                  setProductPic(e.target.files[0]);
                 }}
                 onUpload={() => {
-                  // uploadUserImage(profilePic, productId);
+                  encodeFileBase64(productPic);
                 }}
               >
                 Upload
